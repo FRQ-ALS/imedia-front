@@ -1,0 +1,10 @@
+#circle {
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.approved{
+    background-color: green !important;
+}

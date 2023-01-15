@@ -1,0 +1,35 @@
+#alert {
+  color: black;
+  background-color: white;
+  font-weight: bold;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 0.8em;
+  animation: dropDown 250ms linear;
+  z-index: 10;
+  position: absolute;
+  top: 80px;
+}
+
+.error {
+  background-color: red !important;
+  color: white  !important;
+}
+
+.success {
+  background-color: green !important;
+  color: white  !important;
+}
+
+
+@keyframes dropDown {
+  0% {
+    transform: translateY(-30px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

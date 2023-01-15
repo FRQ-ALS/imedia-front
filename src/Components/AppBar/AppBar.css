@@ -1,0 +1,52 @@
+.main {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 70px;
+  width: 100vw;
+  background-color: #2c2e33;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: row;
+  margin-right: 30px;
+  gap: 20px;
+}
+
+#signInButton {
+  height: 35px;
+  width: 80px;
+  border-radius: 10px;
+}
+
+.homeIcon {
+  scale: 1.5;
+  color: white;
+}
+
+.lockIcon {
+  scale: 1.5;
+}
+
+.loginWindowWrapper {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(10px);
+}
+
+.loginWindow {
+  top: 5%;
+}
+
+.notificationTrayWrapper {
+  position: fixed;
+  right: 10px;
+  z-index: 10;
+}

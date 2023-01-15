@@ -1,0 +1,44 @@
+.container {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  margin-top: 40px;
+}
+
+.item {
+  position: absolute;
+  border-radius: 10px !important;
+  align-items: center;
+  width: 700px;
+}
+
+.title {
+  position: inherit;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px !important;
+  height: 100px;
+}
+
+.details {
+  background-color: #2f3c7e !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 0px 0px 10px 10px;
+  gap: 20px;
+}
+
+.paper {
+  background-color: white !important;
+  border-radius: 20px !important;
+  width: 600px;
+  height: 80px;
+  align-items: center;
+}

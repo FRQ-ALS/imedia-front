@@ -1,0 +1,27 @@
+#housing{
+    width: 70px;
+    height: 30px;
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#switch{
+    width: 27px;
+    height: 27px;
+    border-radius: 50%;
+    background-color: #2c2e33;
+
+    margin-left: 2px;
+    transition: 0.2s;
+}
+
+.private{
+    margin-left: 2px !important;
+}
+
+.public{
+    margin-left: 40px !important;
+}

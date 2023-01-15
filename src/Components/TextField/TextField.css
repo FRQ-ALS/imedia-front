@@ -1,0 +1,72 @@
+.textfield{
+    color: white;
+    height: 55px;
+    width: 400px;
+    font-size: 1.7em;
+    border-radius: 5px;
+    font-family: Helvetica;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    padding-left: 10px;
+}
+
+.textfield:-webkit-autofill,
+.textfield:-webkit-autofill:focus {
+    transition: background-color 600000s 0s, color 600000s 0s;
+}
+.textfield[data-autocompleted] {
+    background-color: transparent !important;
+}
+.textfield:-webkit-autofill{
+    -webkit-text-fill-color: white !important;
+}
+
+.textfield:focus {
+    outline: 2px solid white;
+  }
+
+#error{
+    outline: 2px solid #e3665d;
+    animation: shake 250ms linear;
+}
+
+#success{
+    outline: 2px solid green;
+}
+
+::placeholder {
+    color: white;
+    opacity: 0.3;
+}
+
+::-ms-input-placeholder{
+    color: white;
+    opacity: 0.2;
+}
+
+
+@keyframes shake {
+    10% {
+        transform: translateX(-1%);
+    }
+
+    30% {
+        transform: translateX(1%);
+    }
+
+    50% {
+        transform: translateX(-1%);
+    }
+
+    70% {
+        transform: translateX(1%);
+    }
+    90% {
+        transform: translateX(-1%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
