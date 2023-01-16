@@ -99,7 +99,7 @@ export default function CreatQuestion() {
                 ></CustomTextArea>
               </div>
             ))}
-            <CustomButton onClick={(event) => addNewAnswer(event, i)}>
+            <CustomButton id="addNewAnswerButton" className="addNewAnswerButton" onClick={(event) => addNewAnswer(event, i)}>
               Add new answer
             </CustomButton>
           </div>
