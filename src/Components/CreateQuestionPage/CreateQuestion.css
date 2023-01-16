@@ -3,7 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 10px;
+  gap: 60px;
   margin-top: 50px;
 }
 
@@ -19,6 +19,7 @@
 }
 
 #questionHeading {
+  margin-top: 20px;
   color: white;
   font-size: 2em;
 }
@@ -38,6 +39,8 @@
 #answerChoice {
   display: flex;
   flex-direction: row;
+  justify-content: center;
+  align-items: center;
   background-color: white;
   width: 600px;
   border-radius: 10px;
