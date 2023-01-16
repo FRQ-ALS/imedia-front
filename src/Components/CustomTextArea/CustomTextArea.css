@@ -1,0 +1,19 @@
+.textarea{
+    color: white;
+    font-size: 2em;
+    resize: none;
+    border-radius: 5px;
+    font-family: Helvetica;
+    background-color: transparent;
+    border-top-style: hidden;
+    border-right-style: hidden;
+    border-left-style: hidden;
+    border-bottom-style: hidden;
+    /* outline: 1px solid white; */
+    padding: 10px;
+}
+
+.textarea::placeholder{
+    color: white;
+    opacity: 0.3;
+}

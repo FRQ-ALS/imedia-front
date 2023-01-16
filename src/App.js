@@ -17,7 +17,6 @@ import EmailVerification from "./Components/EmailVerification/EmailVerification"
 import ProjectView from "./Components/ProjectView/ProjectView";
 import AddProjectPage from "./Components/AddProjectPage/AddProjectPage";
 import JoinProjectCard from "./Components/JoinProjectCard/JoinProjectCard";
-import ChatGPT from "./Components/ChatGPT/ChatGPT";
 import LoginWindow from "./Components/LoginWindow/LoginWindow";
 import CustomAlert from "./Components/CustomAlert/CustomAlert";
 import useAuth from "./Hooks/AuthHook";
@@ -42,7 +41,6 @@ function App() {
             <Route exact path="/joinProject=:token" element={<JoinProjectCard/>}/>
             <Route exact path="/project/:id" element={<ProjectView/>}/>
             <Route exact path="/new" element={<AddProjectPage/>}/>
-            <Route path="/chatgpt" element={<ChatGPT/>}/>
             <Route path="/login" element={<LoginWindow/>}/>
           </Routes>
         </ThemeProvider>

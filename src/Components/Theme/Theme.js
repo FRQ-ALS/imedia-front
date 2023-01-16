@@ -13,9 +13,9 @@ palette : {
         contrastText: "#2F3C7E"
     },
     background: {
-        default: "#121212"
-        // default: "#FFFFFF"
-        
+        // default: "#121212"
+        default: "#FFFFFF"
+        //nice blue color 143745
       },
 
 }

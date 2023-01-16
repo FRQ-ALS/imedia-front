@@ -50,3 +50,16 @@
   right: 10px;
   z-index: 10;
 }
+
+#imediaLabel{
+  color: white;
+  font-weight: bold;
+  font-size: 1.5em;
+  user-select: none;
+}
+
+#homeLabelContainer{
+  display: flex;
+  justify-content: center;
+  flex-direction: row;
+}

@@ -37,10 +37,11 @@ export default function Appbar(props) {
   return (
     <div>
       <div variant="regular" className="main">
-        <div className="home-container">
+        <div id="homeLabelContainer" className="home-container">
           <Button onClick={homePageHandler}>
             <MapsHomeWorkRoundedIcon className="homeIcon" />
           </Button>
+          <label id="imediaLabel">iMedia School Portal</label>
         </div>
         {!props.setLogin ? (
           <div className="login-container">

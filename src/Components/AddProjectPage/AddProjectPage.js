@@ -7,7 +7,8 @@ import OwnerTab from "../OwnerTab/OwnerTab";
 import { useNavigate } from "react-router-dom";
 import ProjectInvitation from "../ProjectInvitation/ProjectInvitation";
 import useAlert from "../../Hooks/AlertHook";
-import CustomButton from "../CustomButton/CustomButton"
+import CustomButton from "../CustomButton/CustomButton";
+import CreatQuestion from "../CreateQuestionPage/CreateQuestion";
 
 const NAME_TAKEN_MESSAGE =
   "A project with this name already exists on this account, please enter another name.";
@@ -23,11 +24,11 @@ export default function AddProjectPage(props) {
   const [projectName, setProjectName] = useState("");
   const [projectDescription, setDescription] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
-  const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [invitation, setInvitation] = useState("");
   const [pageToggle, setPageToggle] = useState(true);
   const [token, setToken] = useState("");
+  const [questions, setQuestions] = useState([])
   const navigate = useNavigate();
 
   const handleNameChange = (e) => {
@@ -78,18 +79,21 @@ export default function AddProjectPage(props) {
       body: JSON.stringify(body),
     })
       .then((response) => {
-
-        if (!response.ok){
+        if (!response.ok) {
           response.text().then((text) => setAlert(text, "error"));
         }
-          if(response.ok){
-          {inviteToggled ? (response.json().then((responseJson) =>{
-            setToken(responseJson.token)
-            setPageToggle(false)
-          })): navigate("/dashboard")}
+        if (response.ok) {
+          {
+            inviteToggled
+              ? response.json().then((responseJson) => {
+                  setToken(responseJson.token);
+                  setPageToggle(false);
+                })
+              : navigate("/dashboard");
           }
-
-      }).catch((error) => {
+        }
+      })
+      .catch((error) => {
         setAlert(error.message);
       });
   };
@@ -111,40 +115,31 @@ export default function AddProjectPage(props) {
   }
 
   return (
-    <>
       <div id="pageContainer">
-        {pageToggle ? (
-          <div id="form-container">
-            <div id="fieldContainer">
-              <CustomTextField
-                id="projectName"
-                className="textfield"
-                placeholder="Project Name*"
-                onChange={handleNameChange}
-              />
-              <div className="label">Owned by:</div>
-              <OwnerTab />
-              <CustomTextField
-                id="projectDesc"
-                className="textfield"
-                placeholder="Project Description(optional)"
-                onChange={handleDescriptionChange}
-              />
-            </div>
-            <div id="switchContainer">
-              <p1 className="label">Private</p1>
-              <ToggleSwitch onSetToggle={handleSwitchToggle} />
-              <p1 className="label">Public</p1>
-            </div>
-            <ProjectInvitation onSetInvitation={handleInvitation} />
-            <CustomButton onClick={handleSubmit} id="submit">
-              Create Project
-            </CustomButton>
-          </div>
-        ) : (
-          renderLinkCard()
-        )}
+        <div id="fieldContainer">
+          <CustomTextField
+            id="testName"
+            className="textfield"
+            placeholder="Test Name*"
+            onChange={handleNameChange}
+          />
+          <CustomTextField
+            id="projectDesc"
+            className="textfield"
+            placeholder="Test Description"
+            onChange={handleDescriptionChange}
+          />
+          <CustomTextField
+            id="testSubject"
+            className="textfield"
+            placeholder="Subject"
+            onChange={handleDescriptionChange}
+          />
+          <CustomButton onClick={handleSubmit} id="submit">
+            Save
+          </CustomButton>
+        </div>
+        <CreatQuestion/>
       </div>
-    </>
   );
 }

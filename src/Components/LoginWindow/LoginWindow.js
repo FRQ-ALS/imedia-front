@@ -44,7 +44,7 @@ useEffect(()=>{
     }).then((response) => {
       console.log(response)
       if (response.status != 200) {
-      setAlert("Incorrect email/password. Please try again", "error")
+      setAlert("Incorrect username/password. Please try again", "error")
         return;
       }
 
@@ -67,7 +67,7 @@ useEffect(()=>{
           id="emailField"
           onChange={handleLoginChange}
           name="email"
-          placeholder="Email"
+          placeholder="Username"
           className="login"
         ></CustomTextField>
 
