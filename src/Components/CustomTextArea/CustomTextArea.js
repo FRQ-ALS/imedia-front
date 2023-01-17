@@ -9,6 +9,7 @@ export default function CustomTextArea(props) {
       id={props.id}
       onChange={props.onChange}
       className={classes}
+      value={props.value}
       placeholder={props.placeholder}
     ></textarea>
   );

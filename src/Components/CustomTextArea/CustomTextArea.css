@@ -9,7 +9,7 @@
     border-right-style: hidden;
     border-left-style: hidden;
     border-bottom-style: hidden;
-    /* outline: 1px solid white; */
+    
     padding: 10px;
     text-align: center;
 
@@ -18,4 +18,8 @@
 .textarea::placeholder{
     color: white;
     opacity: 0.3;
+}
+
+.textarea:focus{
+    outline: none;
 }
