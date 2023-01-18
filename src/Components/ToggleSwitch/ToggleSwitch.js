@@ -16,7 +16,7 @@ export default function ToggleSwitch(props) {
         <div
           id="switch"
           onClick={handleToggle}
-          className={toggleSwitch ? "public" : "private"}
+          className={toggleSwitch ? "left" : "right"}
         ></div>
       </div>
     </div>

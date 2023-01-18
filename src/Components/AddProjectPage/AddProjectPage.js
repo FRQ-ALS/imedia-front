@@ -21,31 +21,25 @@ export default function AddProjectPage(props) {
   const { setAlert } = useAlert();
   var jwt = localStorage.getItem("jwt");
 
-  const [projectName, setProjectName] = useState("");
-  const [projectDescription, setDescription] = useState("");
-  const [isPrivate, setIsPrivate] = useState(true);
-  const [alertMessage, setAlertMessage] = useState("");
-  const [invitation, setInvitation] = useState("");
-  const [pageToggle, setPageToggle] = useState(true);
-  const [token, setToken] = useState("");
-  const [questions, setQuestions] = useState([])
+  const [questionsArray, setQuestionsArray] = useState([]);
+  const [name, setName] = useState()
+  const [description, setDescription] = useState()
+  const [subject, setSubject] = useState()
+
   const navigate = useNavigate();
 
   const handleNameChange = (e) => {
-    setProjectName(e.target.value);
+    setName(e.target.value);
   };
 
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
   };
 
-  const handleSwitchToggle = (parameter) => {
-    setIsPrivate(parameter);
-  };
+  const handleSubjectChange = (e) =>{
+    setSubject(e.target.value)
+  }
 
-  const handleInvitation = (parameter) => {
-    setInvitation(parameter);
-  };
 
   const handleCopyButton = (e) => {
     let copyText = document.getElementById("linkText").innerText;
@@ -55,64 +49,39 @@ export default function AddProjectPage(props) {
     setAlert("Copied to clipboard!");
   };
 
-  const handleSubmit = (e) => {
-    let inviteToggled = invitation.inviteToggled;
-    let expiry = invitation.expiry;
-    let maximumUses = invitation.maximumUses;
+  const handleGetQuestions = (data)=>{
+    setQuestionsArray(data)
+    var body = {name, description, subject, questionsArray}
+    console.log(body)
 
-    var body = {
-      projectName,
-      projectDescription,
-      isPrivate,
-      inviteToggled,
-      expiry,
-      maximumUses,
-    };
-
-    fetch("/api/v1/projects/addproject", {
+    fetch("/api/v1/post", {
       credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${jwt}`,
+        // Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(body),
     })
-      .then((response) => {
-        if (!response.ok) {
-          response.text().then((text) => setAlert(text, "error"));
-        }
-        if (response.ok) {
-          {
-            inviteToggled
-              ? response.json().then((responseJson) => {
-                  setToken(responseJson.token);
-                  setPageToggle(false);
-                })
-              : navigate("/dashboard");
-          }
-        }
-      })
-      .catch((error) => {
-        setAlert(error.message);
-      });
-  };
-
-  function renderLinkCard() {
-    let link = `localhost:3000/joinProject=${token}`;
-
-    return (
-      <div id="linkCardContainer">
-        <div id="linkCard">
-          <p id="linkHeader">Your unique invite link: </p>
-          <p id="linkText">{link}</p>
-          <button onClick={handleCopyButton} id="linkButton">
-            Copy
-          </button>
-        </div>
-      </div>
-    );
   }
+
+
+
+  const handleSubmit = (e) => {
+
+    var body = {name, description, subject, questionsArray}
+
+    fetch("/api/v1/post", {
+      credentials: "include",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        // Authorization: `Bearer ${jwt}`,
+      },
+      body: JSON.stringify(body),
+    })
+
+  };
 
   return (
       <div id="pageContainer">
@@ -133,13 +102,10 @@ export default function AddProjectPage(props) {
             id="testSubject"
             className="textfield"
             placeholder="Subject"
-            onChange={handleDescriptionChange}
+            onChange={handleSubjectChange}
           />
-          <CustomButton onClick={handleSubmit} id="submit">
-            Save
-          </CustomButton>
         </div>
-        <CreatQuestion/>
+        <CreatQuestion  getQuestions={handleGetQuestions}/>
       </div>
   );
 }

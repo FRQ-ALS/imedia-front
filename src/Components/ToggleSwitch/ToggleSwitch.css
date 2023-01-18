@@ -18,10 +18,10 @@
     transition: 0.2s;
 }
 
-.private{
+.right{
     margin-left: 2px !important;
 }
 
-.public{
+.left{
     margin-left: 40px !important;
 }

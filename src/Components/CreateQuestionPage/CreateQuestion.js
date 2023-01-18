@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./CreateQuestion.css";
 import CustomButton from "../CustomButton/CustomButton";
 import CustomTextField from "../TextField/CustomTextField";
@@ -6,28 +6,55 @@ import CustomTextArea from "../CustomTextArea/CustomTextArea";
 import { DialogActions } from "@mui/material";
 import { DialogContent } from "@mui/material";
 import { Dialog } from "@mui/material";
-const lol = ["1", "2", "3"];
-export default function CreatQuestion() {
+import { Button } from "@mui/material";
+import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
+import useAlert from "../../Hooks/AlertHook";
+
+
+export default function CreatQuestion(props) {
   const [currentQuestion, setCurrentQuestion] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [questionToBeDeleted, setQuestionTobeDeleted] = useState(null);
-  const [images, setImages] = useState([]);
+  const [imageToBeUploaded, setImageToBeUploaded] = useState(null)
+  const [multipleChoiceToggle, setMultipleChoiceToggle] = useState(true)
+  const [errorText, setErrorText] = useState("")
+  const fileInput = useRef(null);
+  const { setAlert } = useAlert();
 
-  const fileHandler = (e, i) => {
-    const tempImages = [...images];
-    tempImages[i] = e.target.files[0];
-    const fileURL = URL.createObjectURL(e.target.files[0])
-    console.log(tempImages[10])
-    setImages(tempImages);
+
+  const sendQuestionData = () => {
+
+    const errorStack = []
+    for(let i=0; i<currentQuestion.length; i++){
+      if(currentQuestion[i].question=="" && currentQuestion[i].image==undefined){
+        errorStack.push(`• You must set a question for question ${currentQuestion[i].questionNumber}`)
+      }
+      if(currentQuestion[i].answers.length!=0 && currentQuestion[i].correctAnswer==""){
+        errorStack.push(`• You must select a correct answer for question ${currentQuestion[i].questionNumber}`)
+      }
+    }
+
+    if(errorStack.length!=0){
+      setAlert("Please complete neccesary fields before saving", "error")
+      setErrorText(errorStack.toString().replaceAll(",","\n"), "error")
+      return
+    }
+
+  
+    props.getQuestions(currentQuestion);
   };
 
-  function createImageURL(image) {
-    return URL.createObjectURL(image);
-  }
+  const fileHandler = (e, i) => {
+    const tempArr = [...currentQuestion];
+    tempArr[imageToBeUploaded].image = e.target.files[0];
+    setCurrentQuestion(tempArr);
+    setImageToBeUploaded(null)
+  };
 
   const handleAddQuestion = (e) => {
     const newQuestion = {
       questionNumber: "",
+      image: undefined,
       question: "",
       answers: [],
       correctAnswer: "",
@@ -102,6 +129,11 @@ export default function CreatQuestion() {
     return arr;
   }
 
+  const handleUploadClick = (event, i) => {
+    fileInput.current.click();
+    setImageToBeUploaded(i)
+  };
+
   const hanldeQuestionRemove = (event) => {
     let i = questionToBeDeleted;
     const newArr = [...currentQuestion];
@@ -122,23 +154,22 @@ export default function CreatQuestion() {
           <div id="questionHeading">Question {question.questionNumber}</div>
 
           <div id="pictureContainer">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(event) => fileHandler(event, i)}
-          />
-          {images[i]!=undefined ? <img src={URL.createObjectURL(images[i])}></img> : null}
+            <CustomButton id="uploadFileButton" onClick={event=>handleUploadClick(event,i)}>
+              Upload Image
+            </CustomButton>
+            <input
+              type="file"
+              required
+              ref={fileInput}
+              accept="image/*"
+              style={{ display: "none" }}
+              onChange={(event) => fileHandler(event, i)}
+            />
+            {question.image != undefined ? (
+              <img id="questionImage" src={URL.createObjectURL(question.image)}></img>
+            ) : null}
           </div>
 
-          <CustomButton
-            onClick={(event) => {
-              setDialogOpen(true);
-              setQuestionTobeDeleted(i);
-            }}
-            id="removeQuestionButton"
-          >
-            Remove question
-          </CustomButton>
           <Dialog open={dialogOpen}>
             <DialogContent>
               Are you sure you want to remove question {questionToBeDeleted + 1}
@@ -156,6 +187,7 @@ export default function CreatQuestion() {
               </CustomButton>
             </DialogActions>
           </Dialog>
+
           <CustomTextArea
             id="questionField"
             className="questionTextArea"
@@ -192,11 +224,28 @@ export default function CreatQuestion() {
               Add new answer
             </CustomButton>
           </div>
+          <CustomButton
+            onClick={(event) => {
+              setDialogOpen(true);
+              setQuestionTobeDeleted(i);
+            }}
+            id="removeQuestionButton"
+          >
+            Remove question
+          </CustomButton>
         </div>
       ))}
-      <CustomButton onClick={handleAddQuestion} id="addQuestionButton">
-        Add New Question
-      </CustomButton>
+      <>
+        {errorText=="" ? null: <pre id="bottomErrorText">{errorText}</pre>}
+        <div id="bottomButtonsContainer">
+          <CustomButton onClick={handleAddQuestion} id="addQuestionButton">
+            Add New Question
+          </CustomButton>
+          <CustomButton onClick={sendQuestionData} id="saveQuestionsButton">
+            Save
+          </CustomButton>
+        </div>
+      </>
     </div>
   );
 }

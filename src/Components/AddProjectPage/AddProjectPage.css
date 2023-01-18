@@ -119,3 +119,7 @@
   width: 100%;
   margin-top: 40px;
 }
+
+#createQuestion{
+  scale:0.5;
+}

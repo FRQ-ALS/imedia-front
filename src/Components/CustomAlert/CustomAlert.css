@@ -4,11 +4,12 @@
   font-weight: bold;
   padding: 10px;
   border-radius: 10px;
-  font-size: 0.8em;
+  font-family: 'Helvetica' !important;
+  font-size: 1em; 
   animation: dropDown 250ms linear;
   z-index: 10;
-  position: absolute;
-  top: 80px;
+  position: fixed;
+  top: 40px;
 }
 
 .error {
