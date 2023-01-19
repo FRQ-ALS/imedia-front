@@ -1,29 +1,40 @@
 import React, { useState, useRef } from "react";
 import "./CreateQuestion.css";
 import CustomButton from "../CustomButton/CustomButton";
-import CustomTextField from "../TextField/CustomTextField";
 import CustomTextArea from "../CustomTextArea/CustomTextArea";
 import { DialogActions } from "@mui/material";
 import { DialogContent } from "@mui/material";
 import { Dialog } from "@mui/material";
-import { Button } from "@mui/material";
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
 import useAlert from "../../Hooks/AlertHook";
-
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
+import OpenInFullIcon from '@mui/icons-material/OpenInFull';
 
 export default function CreatQuestion(props) {
   const [currentQuestion, setCurrentQuestion] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [questionToBeDeleted, setQuestionTobeDeleted] = useState(null);
   const [imageToBeUploaded, setImageToBeUploaded] = useState(null)
-  const [multipleChoiceToggle, setMultipleChoiceToggle] = useState(true)
+  const [questionMinimized, setQuestionMinimized] = useState([])
   const [errorText, setErrorText] = useState("")
+
   const fileInput = useRef(null);
   const { setAlert } = useAlert();
 
+  const minimizeQuestion = (e,i) => {
+    const tempArr = [...questionMinimized]
+    tempArr[i] = true
+    setQuestionMinimized(tempArr)
+  }
+
+  const maximizeQuestion = (e, i)=>{
+    const tempArr = [...questionMinimized]
+    tempArr[i] = false
+    setQuestionMinimized(tempArr)
+  }
+
 
   const sendQuestionData = () => {
-
     const errorStack = []
     for(let i=0; i<currentQuestion.length; i++){
       if(currentQuestion[i].question=="" && currentQuestion[i].image==undefined){
@@ -32,15 +43,20 @@ export default function CreatQuestion(props) {
       if(currentQuestion[i].answers.length!=0 && currentQuestion[i].correctAnswer==""){
         errorStack.push(`• You must select a correct answer for question ${currentQuestion[i].questionNumber}`)
       }
+      if(currentQuestion[i].answers[currentQuestion[i].correctAnswer]===null){
+        errorStack.push(`• You must select a valid correct answer for question ${currentQuestion[i].questionNumber}`)
+      }
     }
 
     if(errorStack.length!=0){
       setAlert("Please complete neccesary fields before saving", "error")
       setErrorText(errorStack.toString().replaceAll(",","\n"), "error")
       return
+    }else{
+      setErrorText("")
+      setAlert("Save successful!", "success")
     }
 
-  
     props.getQuestions(currentQuestion);
   };
 
@@ -59,10 +75,13 @@ export default function CreatQuestion(props) {
       answers: [],
       correctAnswer: "",
     };
-
     const newArr = [...currentQuestion];
     newArr.push(newQuestion);
     setCurrentQuestion(setQuestionNumbers(newArr));
+
+
+    minimizeQuestion(e, newArr.length-2)
+
   };
 
   //method that adds a new field for answer
@@ -92,8 +111,9 @@ export default function CreatQuestion(props) {
 
   //method that sets the correct answer
   const setCorrectAnswer = (e, i, j) => {
+    console.log(e.target.value, j)
     const question = currentQuestion[i];
-    question.correctAnswer = [question.answers[j]];
+    question.correctAnswer = j;
 
     const newArr = [...currentQuestion];
     newArr[i] = question;
@@ -144,18 +164,48 @@ export default function CreatQuestion(props) {
     setDialogOpen(false);
   };
 
+  function renderMinimizedQuestion(question){
+    return(<div  id="minimizedQuestion">
+      Question {question.questionNumber}
+      <CustomButton onClick={event=> maximizeQuestion(event, question.questionNumber-1)} id="expandQuestionButton">
+        <OpenInFullIcon/>
+        Expand
+      </CustomButton>
+    </div>)
+
+  }
   return (
     <div id="questionsContainer">
-      {/* {currentQuestion.map((question, index)=>(
-        <CustomButton>{question.questionNumber}</CustomButton>
-      ))} */}
       {currentQuestion.map((question, i) => (
+        <>
+        {questionMinimized[i]==true ? renderMinimizedQuestion(question): 
         <div lol={i} key={i} id="question">
+          <div id="questionRemoveContainer">
           <div id="questionHeading">Question {question.questionNumber}</div>
+          <div id="topButtonContainer">
+          <CustomButton
+            onClick={(event) => minimizeQuestion(event, i)}
+            id="minimizeQuestionButton"
+          >
+            <CloseFullscreenIcon/>
+            Minimize
+          </CustomButton>
+          <CustomButton
+            onClick={(event) => {
+              setDialogOpen(true);
+              setQuestionTobeDeleted(i);
+            }}
+            id="removeQuestionButton"
+          >
+            <DeleteForeverIcon/>
+            Delete
+          </CustomButton>
+          </div>
+          </div>
 
           <div id="pictureContainer">
             <CustomButton id="uploadFileButton" onClick={event=>handleUploadClick(event,i)}>
-              Upload Image
+              {question.image==undefined ? "Upload Image" : "Change Image"}
             </CustomButton>
             <input
               type="file"
@@ -188,18 +238,21 @@ export default function CreatQuestion(props) {
             </DialogActions>
           </Dialog>
 
+
           <CustomTextArea
             id="questionField"
             className="questionTextArea"
             placeholder="Enter Question here"
             value={question.question}
             onChange={(event) => setQuestionInput(event, i)}
-          ></CustomTextArea>
+          ></CustomTextArea>  
           <div id="answersContainer">
             {question.answers.map((answer, j) => (
               <div key={j} id="answerChoice">
                 <input
-                  type="checkbox"
+                  type="radio"
+                  name="radAnswer"
+                  checked={question.correctAnswer===j}
                   onChange={(event) => setCorrectAnswer(event, i, j)}
                 ></input>
                 <CustomTextArea
@@ -216,6 +269,8 @@ export default function CreatQuestion(props) {
                 </CustomButton>
               </div>
             ))}
+            {question.answers.length!=0 ? <div id="checkBoxToolTip">Indiatce the correct answer(s) using the checkbox on the left</div> : 
+            <div id="checkBoxToolTip"></div>}
             <CustomButton
               id="addNewAnswerButton"
               className="addNewAnswerButton"
@@ -224,17 +279,12 @@ export default function CreatQuestion(props) {
               Add new answer
             </CustomButton>
           </div>
-          <CustomButton
-            onClick={(event) => {
-              setDialogOpen(true);
-              setQuestionTobeDeleted(i);
-            }}
-            id="removeQuestionButton"
-          >
-            Remove question
-          </CustomButton>
         </div>
+        }
+        </>
       ))}
+      
+
       <>
         {errorText=="" ? null: <pre id="bottomErrorText">{errorText}</pre>}
         <div id="bottomButtonsContainer">

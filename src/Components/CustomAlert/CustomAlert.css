@@ -9,7 +9,7 @@
   animation: dropDown 250ms linear;
   z-index: 10;
   position: fixed;
-  top: 40px;
+  top: 60px;
 }
 
 .error {
