@@ -9,6 +9,7 @@ import useAlert from "../../Hooks/AlertHook";
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import CloseFullscreenIcon from '@mui/icons-material/CloseFullscreen';
 import OpenInFullIcon from '@mui/icons-material/OpenInFull';
+import PdfViewer from "../AddProjectPage/PdfViewer/PdfViewer";
 
 export default function CreatQuestion(props) {
   const [currentQuestion, setCurrentQuestion] = useState([]);
@@ -17,10 +18,12 @@ export default function CreatQuestion(props) {
   const [imageToBeUploaded, setImageToBeUploaded] = useState(null)
   const [questionMinimized, setQuestionMinimized] = useState([])
   const [errorText, setErrorText] = useState("")
+  const [imageArray, setImageArray] = useState([])
+  const [pdfDialogOpen, setPdfDialogOpen] = useState(false)
 
   const fileInput = useRef(null);
   const { setAlert } = useAlert();
-
+  console.log(imageArray)
   const minimizeQuestion = (e,i) => {
     const tempArr = [...questionMinimized]
     tempArr[i] = true
@@ -40,13 +43,17 @@ export default function CreatQuestion(props) {
       if(currentQuestion[i].question=="" && currentQuestion[i].image==undefined){
         errorStack.push(`• You must set a question for question ${currentQuestion[i].questionNumber}`)
       }
-      if(currentQuestion[i].answers.length!=0 && currentQuestion[i].correctAnswer==""){
+      if(currentQuestion[i].answers.length!=0 && currentQuestion[i].correctAnswer==null){
         errorStack.push(`• You must select a correct answer for question ${currentQuestion[i].questionNumber}`)
       }
-      if(currentQuestion[i].answers[currentQuestion[i].correctAnswer]===null){
+      //checking whether a selected answer is not just an empty box
+      if(currentQuestion[i].answers[currentQuestion[i].correctAnswer]=="" || 
+      currentQuestion[i].answers[currentQuestion[i].correctAnswer]==null){
         errorStack.push(`• You must select a valid correct answer for question ${currentQuestion[i].questionNumber}`)
       }
     }
+
+    console.log(currentQuestion)
 
     if(errorStack.length!=0){
       setAlert("Please complete neccesary fields before saving", "error")
@@ -54,17 +61,32 @@ export default function CreatQuestion(props) {
       return
     }else{
       setErrorText("")
-      setAlert("Save successful!", "success")
+      // setAlert("Save successful!", "success")
     }
-
     props.getQuestions(currentQuestion);
   };
 
   const fileHandler = (e, i) => {
-    const tempArr = [...currentQuestion];
-    tempArr[imageToBeUploaded].image = e.target.files[0];
-    setCurrentQuestion(tempArr);
-    setImageToBeUploaded(null)
+
+    const tempImage = [...imageArray]
+    tempImage[imageToBeUploaded] = e.target.files[0]
+    setImageArray(tempImage)
+
+    const body = new FormData()
+    body.append("file", e.target.files[0])
+    fetch("/api/v1/image-service/uploadimage",{
+    credentials:"include",
+    method:"POST",
+    body:body
+    }).then((response)=>response.json()).then((responseJson)=>{
+      const tempArr = [...currentQuestion];
+      tempArr[imageToBeUploaded].image = responseJson
+      setCurrentQuestion(tempArr);
+      setImageToBeUploaded(null)
+    })
+
+    console.log(currentQuestion)
+
   };
 
   const handleAddQuestion = (e) => {
@@ -73,7 +95,7 @@ export default function CreatQuestion(props) {
       image: undefined,
       question: "",
       answers: [],
-      correctAnswer: "",
+      correctAnswer:null,
     };
     const newArr = [...currentQuestion];
     newArr.push(newQuestion);
@@ -172,8 +194,16 @@ export default function CreatQuestion(props) {
         Expand
       </CustomButton>
     </div>)
+  }
+
+  function returnImageURL(i){
+    if(imageArray[i]===undefined){
+      return ""
+    }
+    return URL.createObjectURL(imageArray[i])
 
   }
+
   return (
     <div id="questionsContainer">
       {currentQuestion.map((question, i) => (
@@ -207,6 +237,9 @@ export default function CreatQuestion(props) {
             <CustomButton id="uploadFileButton" onClick={event=>handleUploadClick(event,i)}>
               {question.image==undefined ? "Upload Image" : "Change Image"}
             </CustomButton>
+            <CustomButton onClick={event=> setPdfDialogOpen(true)}>
+              Insert image from pdf
+            </CustomButton>
             <input
               type="file"
               required
@@ -216,7 +249,7 @@ export default function CreatQuestion(props) {
               onChange={(event) => fileHandler(event, i)}
             />
             {question.image != undefined ? (
-              <img id="questionImage" src={URL.createObjectURL(question.image)}></img>
+              <img id="questionImage" src={returnImageURL(i)}></img>
             ) : null}
           </div>
 
@@ -296,6 +329,23 @@ export default function CreatQuestion(props) {
           </CustomButton>
         </div>
       </>
+
+      <Dialog fullWidth maxWidth="600px" open={pdfDialogOpen}>
+            <DialogContent>
+              <PdfViewer/>
+            </DialogContent>
+            <DialogActions id="deleteDialogActions">
+              <CustomButton
+                // onClick={(event) => }
+                id="deleteButton"
+              >
+                Delete
+              </CustomButton>
+              <CustomButton onClick={(event) => setPdfDialogOpen(false)}>
+                Cancel
+              </CustomButton>
+            </DialogActions>
+          </Dialog>
     </div>
   );
 }

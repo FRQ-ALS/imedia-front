@@ -2,29 +2,52 @@ import React, { useState, useRef, useEffect } from "react";
 
 import "./AddProjectPage.css";
 import CustomTextField from "../TextField/CustomTextField";
-import ToggleSwitch from "../ToggleSwitch/ToggleSwitch";
-import OwnerTab from "../OwnerTab/OwnerTab";
 import { useNavigate } from "react-router-dom";
-import ProjectInvitation from "../ProjectInvitation/ProjectInvitation";
 import useAlert from "../../Hooks/AlertHook";
 import CustomButton from "../CustomButton/CustomButton";
 import CreatQuestion from "../CreateQuestionPage/CreateQuestion";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import Select from 'react-select'
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
+import pdfdocument from "../../health.pdf"
+// import Pdf from "@mikecousins/react-pdf";
 
-const NAME_TAKEN_MESSAGE =
-  "A project with this name already exists on this account, please enter another name.";
-const FIELD_EMPTY_MESSAGE =
-  "Project name cannot be empty! Please enter a project name";
-const BELOW_ZERO_MESSAGE = "The maximum number of uses cannot be 0 or lower";
-const INVALID_DATE_MESSAGE = "The selected date must be from tomorrow onwards";
+import PdfViewer from "./PdfViewer/PdfViewer";
+
+const options = {
+  cMapUrl: 'cmaps/',
+  cMapPacked: true,
+  standardFontDataUrl: 'standard_fonts/',
+};
+
+
+const subjects = [
+  {value:'maths',label:'Maths'},
+  {value:'science', label:'Science'},
+  {value:'english',label:'English'}
+]
+
+const examTypes = [
+  {value:'exam',label:'Exam'},
+  {value:'quiz', label:'Quiz'},
+  {value:'homework',label:'Homework'}
+]
 
 export default function AddProjectPage(props) {
   const { setAlert } = useAlert();
   var jwt = localStorage.getItem("jwt");
 
   const [questionsArray, setQuestionsArray] = useState([]);
-  const [name, setName] = useState()
-  const [description, setDescription] = useState()
-  const [subject, setSubject] = useState()
+  const [name, setName] = useState();
+  const [type, setType] = useState();
+  const [subject, setSubject] = useState();
+
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
 
   const navigate = useNavigate();
 
@@ -32,14 +55,13 @@ export default function AddProjectPage(props) {
     setName(e.target.value);
   };
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleTypeChange = (e) => {
+    setType(e.value);
   };
 
-  const handleSubjectChange = (e) =>{
-    setSubject(e.target.value)
-  }
-
+  const handleSubjectChange = (e) => {
+    setSubject(e.value);
+  };
 
   const handleCopyButton = (e) => {
     let copyText = document.getElementById("linkText").innerText;
@@ -49,12 +71,12 @@ export default function AddProjectPage(props) {
     setAlert("Copied to clipboard!");
   };
 
-  const handleGetQuestions = (data)=>{
-    setQuestionsArray(data)
-    var body = {name, description, subject, questionsArray}
-    console.log(body)
+  const handleGetQuestions = (questionsArray) => {
+    var body = { name, type, subject, questionsArray};
+    
+    // if()
 
-    fetch("/api/v1/post", {
+    fetch("/api/v1/account/post", {
       credentials: "include",
       method: "POST",
       headers: {
@@ -62,50 +84,31 @@ export default function AddProjectPage(props) {
         // Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(body),
-    })
-  }
-
-
-
-  const handleSubmit = (e) => {
-
-    var body = {name, description, subject, questionsArray}
-
-    fetch("/api/v1/post", {
-      credentials: "include",
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        // Authorization: `Bearer ${jwt}`,
-      },
-      body: JSON.stringify(body),
-    })
-
+    });
   };
 
+
   return (
-      <div id="pageContainer">
-        <div id="fieldContainer">
-          <CustomTextField
-            id="testName"
-            className="textfield"
-            placeholder="Test Name*"
-            onChange={handleNameChange}
-          />
-          <CustomTextField
-            id="projectDesc"
-            className="textfield"
-            placeholder="Test Description"
-            onChange={handleDescriptionChange}
-          />
-          <CustomTextField
-            id="testSubject"
-            className="textfield"
-            placeholder="Subject"
-            onChange={handleSubjectChange}
-          />
-        </div>
-        <CreatQuestion  getQuestions={handleGetQuestions}/>
+    <div id="pageContainer">
+      <div id="fieldContainer">
+        <CustomButton id="backToDashboardButton" onClick={event=>navigate("/dashboard")}>
+          <ArrowBackIcon />
+          Dashboard
+        </CustomButton>
+        {/* Test Name: */}
+        <CustomTextField
+          id="testName"
+          className="textfield"
+          placeholder="Test Name*"
+          onChange={handleNameChange}
+        />
+        Subject: 
+        <Select onChange={handleSubjectChange} options={subjects} styles={{height:'100px'}} id="selector"/>
+        Assessment Type: 
+        <Select onChange={handleTypeChange} options={examTypes} styles={{height:'100px'}} id="selector"/>
       </div>
+      <PdfViewer/>
+      <CreatQuestion getQuestions={handleGetQuestions} />
+    </div>
   );
 }
