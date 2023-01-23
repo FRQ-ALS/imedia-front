@@ -1,31 +1,110 @@
-.Example__container__document {
-  margin: 1em 0;
+#pdfContainer{
+  /* margin: 1em 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: calc(100% - 2em);
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
   margin: 1em;
   max-width: 100%;
   max-height: 40%;
   height: auto !important;
   padding: 20px;
   color: black;
-  transition: 0.5s;
-  user-select: none;
+  user-select: none; */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-height: 40%;
+
 }
-.Example {
-  max-width: 700px;
+
+#fileContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 40%;
+
+}
+
+#pdfViewerContainer{
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+gap: 20px;
+
+}
+
+#uploadFileButton{
+  outline: 1px dotted black;
+}
+
+
+#documentContainer{
+  margin-top: 10px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.5);
+  user-select: none;
 }
 
 #areaSelector {
   position: absolute;
-  min-height: 100px;
-  width: 600px;
+  min-height: 10px;
   max-width: 600px;
   outline: 2px solid red;
-  /* z-index: 10; */
-  /* cursor: n-resize; */
   cursor: pointer;
   transition: 0.1s;
+}
+
+#pdfNavigationContainer{
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  
+}
+
+#pdfPageHeading{
+  color: red;
+  font-weight:bold;
+}
+
+#pdfRouter{
+  height:100px;
+  width:200px;
+  outline: 1px solid red;
+}
+
+#pdfUploadContainer{
+  position:sticky;
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  width: 100%;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+#previewImage{
+  aspect-ratio: auto;
+  max-width: 500px;
+}
+
+#navButton{
+  background-color: green;
+  color: white;
+  height: 30px;
+}
+
+#previewContainer{
+  width: 500px;
+  aspect-ratio: auto;
+  outline: 1px dotted black;
 }

@@ -107,7 +107,7 @@ export default function AddProjectPage(props) {
         Assessment Type: 
         <Select onChange={handleTypeChange} options={examTypes} styles={{height:'100px'}} id="selector"/>
       </div>
-      <PdfViewer/>
+      {/* <PdfViewer/> */}
       <CreatQuestion getQuestions={handleGetQuestions} />
     </div>
   );

@@ -3,6 +3,7 @@ import "./Dashboard.css";
 
 import Sidebar from "../Sidebar/Sidebar";
 import Projects from "../Projects/Projects";
+import AreaSelector from "../AreaSelector/AreaSelector"
 
 export default function Dashboard() {
 

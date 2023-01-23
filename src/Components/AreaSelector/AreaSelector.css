@@ -1,0 +1,34 @@
+#resizableRect{
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  cursor: move;
+  z-index: 10;
+}
+
+#roofContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 98px;
+}
+
+#left {
+  background-color: red;
+  height: 100px;
+  width: 1px;
+}
+#right {
+  background-color: red;
+  height: 100px;
+  width: 1px;
+}
+#top {
+  background-color: red;
+  width: 600px;
+  height: 1px;
+}
+#bottom {
+  background-color: red;
+  width: 600px;
+  height: 1px;
+}
