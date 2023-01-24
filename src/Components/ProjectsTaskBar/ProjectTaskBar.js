@@ -3,15 +3,17 @@ import { useNavigate } from "react-router-dom";
 import "./ProjectTaskBar.css";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ProjectTaskBar() {
-  const [dialogOpen, setDialogOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false)
 
   const navigate = useNavigate()
 
   const handleAddButton = () => {
-    navigate("/new")
+    const token = uuidv4()
+
+    navigate(`/new${token}`)
   };
 
   const handleSearchButton = () => {

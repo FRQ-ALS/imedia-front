@@ -1,8 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
-
 import "./AddProjectPage.css";
 import CustomTextField from "../TextField/CustomTextField";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAlert from "../../Hooks/AlertHook";
 import CustomButton from "../CustomButton/CustomButton";
 import CreatQuestion from "../CreateQuestionPage/CreateQuestion";
@@ -12,7 +11,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack5';
 import pdfdocument from "../../health.pdf"
 // import Pdf from "@mikecousins/react-pdf";
 
-import PdfViewer from "./PdfViewer/PdfViewer";
+import PdfViewer from "../PdfViewer/PdfViewer";
 
 const options = {
   cMapUrl: 'cmaps/',
@@ -36,6 +35,9 @@ const examTypes = [
 export default function AddProjectPage(props) {
   const { setAlert } = useAlert();
   var jwt = localStorage.getItem("jwt");
+
+  const params = useParams()
+  console.log(params.token)
 
   const [questionsArray, setQuestionsArray] = useState([]);
   const [name, setName] = useState();
@@ -72,9 +74,11 @@ export default function AddProjectPage(props) {
   };
 
   const handleGetQuestions = (questionsArray) => {
-    var body = { name, type, subject, questionsArray};
+    const token = params.token
+    var body = { name, type, subject, questionsArray, token};
     
     // if()
+    console.log(body)
 
     fetch("/api/v1/account/post", {
       credentials: "include",
@@ -84,7 +88,9 @@ export default function AddProjectPage(props) {
         // Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(body),
-    });
+    }).then((response)=>{
+        console.log(response.status)
+    })
   };
 
 

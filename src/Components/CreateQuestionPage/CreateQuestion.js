@@ -9,7 +9,10 @@ import useAlert from "../../Hooks/AlertHook";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
-import PdfViewer from "../AddProjectPage/PdfViewer/PdfViewer";
+import PdfViewer from "../PdfViewer/PdfViewer";
+import { v4 as uuidv4 } from "uuid";
+import AddBoxIcon from '@mui/icons-material/AddBox';
+import UploadIcon from '@mui/icons-material/Upload';
 
 export default function CreatQuestion(props) {
   const [currentQuestion, setCurrentQuestion] = useState([]);
@@ -80,28 +83,22 @@ export default function CreatQuestion(props) {
   };
 
   const handleFileFromPdf = (parameter) => {
-    if (parameter === null) {
-      setpdfErrorText("You must take screenshot before adding the picture");
-      return;
-    }
-    setpdfErrorText("");
     const tempImage = [...imageArray];
     tempImage[imageToBeUploaded] = parameter;
     setImageArray(tempImage);
-    uploadImage();
+    uploadImage(parameter, imageToBeUploaded);
   };
 
   const fileHandler = (e, i) => {
     const tempImage = [...imageArray];
     tempImage[imageToBeUploaded] = e.target.files[0];
     setImageArray(tempImage);
-    uploadImage();
+    uploadImage(e.target.files[0], imageToBeUploaded);
   };
 
-  const uploadImage = () => {
+  const uploadImage = (file, index) => {
     const body = new FormData();
-    console.log(imageArray[imageToBeUploaded]);
-    body.append("file", imageArray[imageToBeUploaded]);
+    body.append("file", file);
     fetch("/api/v1/image-service/uploadimage", {
       credentials: "include",
       method: "POST",
@@ -111,18 +108,20 @@ export default function CreatQuestion(props) {
       .then((responseJson) => {
         console.log(responseJson);
         const tempArr = [...currentQuestion];
-        tempArr[imageToBeUploaded].image = responseJson;
+        tempArr[index].image = responseJson;
         setCurrentQuestion(tempArr);
       });
   };
 
   const handleAddQuestion = (e) => {
+    const token = uuidv4();
     const newQuestion = {
       questionNumber: "",
       image: undefined,
       question: "",
       answers: [],
       correctAnswer: null,
+      token: token,
     };
     const newArr = [...currentQuestion];
     newArr.push(newQuestion);
@@ -211,6 +210,11 @@ export default function CreatQuestion(props) {
     const newArr = [...currentQuestion];
     newArr.splice(i, 1);
 
+    //removing question from image array
+    const tempImages = [...imageArray];
+    tempImages.splice(i, 1);
+    setImageArray(tempImages);
+
     setCurrentQuestion(setQuestionNumbers(newArr));
     setQuestionTobeDeleted(null);
     setDialogOpen(false);
@@ -252,6 +256,32 @@ export default function CreatQuestion(props) {
                 <div id="questionHeading">
                   Question {question.questionNumber}
                 </div>
+                <div id="questionActionButtonsContainer">
+                  <CustomButton
+                    id="addNewAnswerButton"
+                    className="addNewAnswerButton"
+                    onClick={(event) => addNewAnswer(event, i)}
+                  >
+                    <AddBoxIcon/>
+                    New Answer Choice
+                  </CustomButton>
+                  <CustomButton
+                    id="uploadFileButton"
+                    onClick={(event) => handleUploadClick(event, i)}
+                  >
+                    <UploadIcon/>
+                    {question.image == undefined
+                      ? "Add image from file"
+                      : "Change image from file"}
+
+                  </CustomButton>
+                  <CustomButton
+                  id="insertFromPdfButton"
+                    onClick={(event) => handleUploadFromPdfClick(event, i)}
+                  >
+                    Insert image from pdf
+                  </CustomButton>
+                </div>
                 <div id="topButtonContainer">
                   <CustomButton
                     onClick={(event) => minimizeQuestion(event, i)}
@@ -274,7 +304,7 @@ export default function CreatQuestion(props) {
               </div>
 
               <div id="pictureContainer">
-                <CustomButton
+                {/* <CustomButton
                   id="uploadFileButton"
                   onClick={(event) => handleUploadClick(event, i)}
                 >
@@ -286,7 +316,7 @@ export default function CreatQuestion(props) {
                   onClick={(event) => handleUploadFromPdfClick(event, i)}
                 >
                   Insert image from pdf
-                </CustomButton>
+                </CustomButton> */}
                 <input
                   type="file"
                   required
@@ -330,7 +360,7 @@ export default function CreatQuestion(props) {
                   <div key={j} id="answerChoice">
                     <input
                       type="radio"
-                      name="radAnswer"
+                      name={`radAnswer${(i, j)}`}
                       checked={question.correctAnswer === j}
                       onChange={(event) => setCorrectAnswer(event, i, j)}
                     ></input>
@@ -356,13 +386,13 @@ export default function CreatQuestion(props) {
                 ) : (
                   <div id="checkBoxToolTip"></div>
                 )}
-                <CustomButton
+                {/* <CustomButton
                   id="addNewAnswerButton"
                   className="addNewAnswerButton"
                   onClick={(event) => addNewAnswer(event, i)}
                 >
                   Add new answer
-                </CustomButton>
+                </CustomButton> */}
               </div>
             </div>
           )}

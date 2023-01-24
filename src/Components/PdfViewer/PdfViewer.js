@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack5";
 import "react-pdf/dist/esm/Page/AnnotationLayer.css";
 import "react-pdf/dist/esm/Page/TextLayer.css";
-import CustomButton from "../../CustomButton/CustomButton";
+import CustomButton from "../CustomButton/CustomButton";
 import html2canvas from "html2canvas";
 import { DialogActions } from "@mui/material";
 import { DialogContent } from "@mui/material";
@@ -22,20 +22,14 @@ export default function PdfViewer(props) {
   const fileInput = useRef(null);
   const [imageURL, setImage] = useState(null);
   // const [mouseDown, setMouseDown] = useState(false)
-  const [height, setHeight] = useState("100px");
-  const [width, setWidth] = useState("600px");
+  const [height, setHeight] = useState(100);
+  const [width, setWidth] = useState(600);
   const ref = useRef(null);
-  const [boxPosition, setBoxPosition] = useState({
-    x: 0,
-    y: 0,
-    offsetX: 0,
-    offsetY: 0,
-  });
   const [clipPosition, setClipPosition] = useState({
     left: 0,
     top: 0,
-    height: 100,
-    width: 600,
+    height: height,
+    width: width,
   });
   // const [offset, setOffset] = useState([0,0])
 
@@ -46,20 +40,21 @@ export default function PdfViewer(props) {
   const page = document.getElementsByClassName("lol");
 
   function takeScreenshot() {
+    console.log(clipPosition);
     html2canvas(page[0], {
       x: clipPosition.left,
       y: clipPosition.top,
-      width: clipPosition.width,
-      height: clipPosition.height,
+      width: width,
+      height: height,
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL();
       setImage(dataUrl);
       canvas.toBlob(function (blob) {
         var file = new File([blob], "screenshot", { type: "image/jpeg" });
         props.setImageURL(file);
-        props.setDialog(false)
+        props.setDialog(false);
       }, "image/jpeg");
-      document.getElementById("#previewImage").src = dataUrl;
+      // document.getElementById("#previewImage").src = dataUrl;
     });
   }
 
@@ -134,11 +129,17 @@ export default function PdfViewer(props) {
   };
 
   const handleSelectorHeight = (e) => {
-    setHeight(e.target.value * 10 + "px");
+    setHeight(Number(e.target.value) * 10);
+    // const temp = clipPosition
+    // temp.height(Number(e.target.value) * 10)
+    // setClipPosition(temp)
   };
 
   const handleSelectorWidth = (e) => {
-    setWidth(e.target.value * 6 + "px");
+    setWidth(Number(e.target.value) * 6);
+    // const temp = clipPosition
+    // temp.wid(Number(e.target.value) * 6)
+    // setClipPosition(temp)
   };
 
   function returnImageURL() {
@@ -147,36 +148,36 @@ export default function PdfViewer(props) {
 
   return (
     <div id="pdfViewerContainer">
-      {file === null ? null : (
+      {file === null || file === undefined ? null : (
         <div id="pdfContainer">
           <div id="fileContainer">
-          <div id="pdfNavigationContainer">
-            <CustomButton id="navButton" onClick={decrementPageNumber}>
-              Prev
-            </CustomButton>
-            <p id="pdfPageHeading">{numPages}</p>
-            <CustomButton id="navButton" onClick={incrementPageNumber}>
-              Next
-            </CustomButton>
-          </div>
-          <div id="documentContainer">
-            <Document
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              file={file}
-              onLoadSuccess={onDocumentLoadSuccess}
-              options={options}
-            >
-              <Page className="lol" pageNumber={numPages}>
-                <div
-                  ref={ref}
-                  style={{ left: 0, top: 0, height: height, width: width }}
-                  onMouseDown={handleMouseDown}
-                  id="areaSelector"
-                ></div>
-              </Page>
-            </Document>
-          </div>
+            <div id="pdfNavigationContainer">
+              <CustomButton id="navButton" onClick={decrementPageNumber}>
+                Prev
+              </CustomButton>
+              <p id="pdfPageHeading">{numPages}</p>
+              <CustomButton id="navButton" onClick={incrementPageNumber}>
+                Next
+              </CustomButton>
+            </div>
+            <div id="documentContainer">
+              <Document
+                onMouseUp={handleMouseUp}
+                onMouseMove={handleMouseMove}
+                file={file}
+                onLoadSuccess={onDocumentLoadSuccess}
+                options={options}
+              >
+                <Page className="lol" pageNumber={numPages}>
+                  <div
+                    ref={ref}
+                    style={{ left: 0, top: 0, height: height, width: width }}
+                    onMouseDown={handleMouseDown}
+                    id="areaSelector"
+                  ></div>
+                </Page>
+              </Document>
+            </div>
           </div>
           {/* <div id="previewContainer">
             <img id="previewImage" src={imageURL}></img>
@@ -192,25 +193,43 @@ export default function PdfViewer(props) {
           type="file"
         />
         <CustomButton
-          id="uploadFileButton"
+          id="pdfDialogButton"
           onClick={(event) => handleUploadClick(event)}
         >
           Upload pdf file
         </CustomButton>
-        <label for="height">Height</label>
-        <input
-          defaultValue={height}
-          onChange={handleSelectorHeight}
-          type="range"
-        ></input>
-        <label for="height">Width</label>
-        <input
-          id="height"
-          defaultValue={width}
-          onChange={handleSelectorWidth}
-          type="range"
-        ></input>
-        <CustomButton onClick={takeScreenshot}>Take Screenshot</CustomButton>
+        {file === null || file === undefined ? null : (
+          <>
+            <label for="height">Height</label>
+            <input
+              defaultValue={height / 10}
+              onChange={handleSelectorHeight}
+              type="range"
+            ></input>
+            <label for="height">Width</label>
+            <input
+              id="height"
+              defaultValue={width / 6}
+              onChange={handleSelectorWidth}
+              type="range"
+            ></input>
+            <CustomButton id="pdfDialogButton" onClick={takeScreenshot}>
+              Take Screenshot
+            </CustomButton>
+            {/* <CustomButton
+              id="uploadFileButton"
+              onClick={(event) => props.setDialog(false)}
+            >
+              Close
+            </CustomButton> */}
+          </>
+        )}
+          <CustomButton
+              id="pdfDialogButton"
+              onClick={(event) => props.setDialog(false)}
+            >
+              Close
+            </CustomButton>
       </div>
     </div>
   );

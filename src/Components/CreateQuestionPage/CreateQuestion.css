@@ -88,7 +88,12 @@
   gap: 10px;
 }
 #uploadFileButton {
-  height: 30px;
+  display: flex;
+  flex-direction: row;
+  align-items: center ;
+  background-color: transparent;
+  color: white;
+  outline: 1px solid !important;
 }
 
 #questionImage {
@@ -112,8 +117,8 @@
 }
 
 .questionTextArea {
-  font-size: 1em !important;
-  width: 1000px;
+  font-size: 1.1em !important;
+  width: 700px;
   min-height: 60px;
   resize: vertical !important;
 }
@@ -168,10 +173,12 @@ padding-right: 30px;
 }
 
 #addNewAnswerButton {
-  height: 40px;
-  width: 100px;
-  margin-bottom: 20px;
-  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center ;
+  background-color: transparent;
+  color: white;
+  outline: 1px solid !important;
 }
 
 #answerRemoveButton {
@@ -209,5 +216,23 @@ padding-right: 30px;
 #checkBoxToolTip{
   color: white;
   opacity: 0.7;
+}
+
+#questionActionButtonsContainer{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* align-items: center; */
+  gap: 10px;
+  height: 30px;
+}
+
+#insertFromPdfButton{
+  display: flex;
+  flex-direction: row;
+  align-items: center ;
+  background-color: transparent;
+  color: white;
+  outline: 1px solid !important;
 }
 

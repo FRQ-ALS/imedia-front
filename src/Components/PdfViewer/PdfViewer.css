@@ -36,7 +36,7 @@ gap: 20px;
 }
 
 #uploadFileButton{
-  outline: 1px dotted black;
+  outline: 1px solid black;
 }
 
 
@@ -107,4 +107,10 @@ gap: 20px;
   width: 500px;
   aspect-ratio: auto;
   outline: 1px dotted black;
+}
+
+#pdfDialogButton{
+  padding: 5px 20px;
+  color: white;
+  background-color: red;
 }

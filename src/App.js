@@ -40,7 +40,7 @@ function App() {
             <Route exact path="/verify/:token" element={<EmailVerification/>}/>
             <Route exact path="/joinProject=:token" element={<JoinProjectCard/>}/>
             <Route exact path="/project/:id" element={<ProjectView/>}/>
-            <Route exact path="/new" element={<AddProjectPage/>}/>
+            <Route exact path="/new:token" element={<AddProjectPage/>}/>
             <Route path="/login" element={<LoginWindow/>}/>
           </Routes>
         </ThemeProvider>

@@ -24,11 +24,7 @@ export default function Projects(props) {
   const buttonHandler = (projectID) => {
     navigate("/project/ 3");
   };
-
-  const setProjectHover = (e) =>{
-    console.log("Hovering...")
-    setShowDescription(true)
-  }
+  
 
   const fetchProjects = () => {
     fetch("/api/v1/projects/getProjects", {
@@ -97,27 +93,6 @@ export default function Projects(props) {
   const renderTable = () => {
     return (
         <div id="projectTable">
-            {projectData.map((project, index) => (
-              <>
-              <div id="tableRow" 
-              onMouseEnter={event => {
-                setShowDescription(true)
-                setSelectedProject(index)}} 
-              onMouseLeave={event => setShowDescription(false)} 
-              onClick={event => console.log(project.projectId)}>
-                <div id="tableProjectTitle"  className="tableBodyHeader">{project.projectTitle}</div>
-                <div>{user.userID === project.owner.userID? "Owner" : "Collaborator" }</div>
-                <div id="status-container">
-                <div id="tablePendingTasks" className="tableBodyHeader">{project.pendingTasks}</div>
-                <div id="tableCompletedTasks" className="tableBodyHeader">{project.completedTasks}</div>
-                <div id="tableBlockedTasks" className="tableBodyHeader">{project.blockedTasks}</div>
-                </div>
-                <div id="tableCollaborators" className="tableBodyHeader">Collaborators</div>
-                {showDescription && selectedProject==index ? <div id="descriptionDiv">{project.projectDescription}</div> : null}
-              </div>
-              {/* {showDescription && selectedProject==index ? <div id="descriptionDiv">{project.projectDescription}</div> : null} */}
-              </>
-            ))}
         </div>
     );
   };
