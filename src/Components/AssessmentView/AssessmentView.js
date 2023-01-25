@@ -18,7 +18,6 @@ export default function AssessmentView(props) {
 
   return (
     <div id={props.id} className="projectsContainer">
-      <AssessmentTaskBar />
       <AssessmentDirectory/>
     </div>
   );

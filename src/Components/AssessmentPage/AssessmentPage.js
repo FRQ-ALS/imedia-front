@@ -57,7 +57,6 @@ export default function AssessmentPage(props) {
         return
       }
       response.json().then((responseJson)=>{
-        console.log(responseJson)
         setType({label:responseJson.type, value:responseJson.type})
         setSubject({label:responseJson.subject, value:responseJson.subject})
         setName(responseJson.name)
@@ -104,7 +103,9 @@ export default function AssessmentPage(props) {
       },
       body: JSON.stringify(body),
     }).then((response)=>{
-        console.log(response.status)
+        if(response.ok){
+          setAlert("Save successful!", "success")
+        }
     })
   };
 
