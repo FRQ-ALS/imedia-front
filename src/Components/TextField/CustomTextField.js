@@ -6,8 +6,10 @@ export default function CustomTextField(props) {
 
   return (
     <input
-      id={props.variant}
+      id={props.id}
       onChange={props.onChange}
+      value={props.value}
+      defaultValue={props.defaultValue}
       type={props.type}
       className={classes}
       name={props.name}

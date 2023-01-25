@@ -13,15 +13,16 @@ const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState(JSON.parse(localStorage.getItem("loggedIn")));
   const [user, setUser] = useState(null);
+
   const navigate = useNavigate()
   const location = useLocation()
   useEffect(() => {
     const isAuth = async () => {
-        const jwt = localStorage.getItem("jwt")
+        const jwt = document.cookie.split("=")[1]
         fetch("/api/v1/account/auth",
         {
           credentials: "include",
-          method:"GET",
+          method:"POST",
           headers:{
             "Authorization": `Bearer ${jwt}`
           }

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import "./CreateQuestion.css";
 import CustomButton from "../CustomButton/CustomButton";
 import CustomTextArea from "../CustomTextArea/CustomTextArea";
@@ -11,8 +11,9 @@ import CloseFullscreenIcon from "@mui/icons-material/CloseFullscreen";
 import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import PdfViewer from "../PdfViewer/PdfViewer";
 import { v4 as uuidv4 } from "uuid";
-import AddBoxIcon from '@mui/icons-material/AddBox';
-import UploadIcon from '@mui/icons-material/Upload';
+import AddBoxIcon from "@mui/icons-material/AddBox";
+import UploadIcon from "@mui/icons-material/Upload";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 export default function CreatQuestion(props) {
   const [currentQuestion, setCurrentQuestion] = useState([]);
@@ -23,12 +24,20 @@ export default function CreatQuestion(props) {
   const [errorText, setErrorText] = useState("");
   const [imageArray, setImageArray] = useState([]);
   const [pdfDialogOpen, setPdfDialogOpen] = useState(false);
-  const [importedPdfImage, setImportedPdfImage] = useState(null);
-  const [pdfErrorText, setpdfErrorText] = useState("");
   const [currentPdf, setCurrentPdf] = useState(null);
-
   const fileInput = useRef(null);
   const { setAlert } = useAlert();
+
+  const jwt = document.cookie.split("=")[1]
+
+
+  useEffect(() => {
+    if (props.setQuestionsArray.length == 0) {
+      return;
+    }
+    setCurrentQuestion(props.setQuestionsArray);
+  }, [props.setQuestionsArray]);
+
   const minimizeQuestion = (e, i) => {
     const tempArr = [...questionMinimized];
     tempArr[i] = true;
@@ -62,8 +71,10 @@ export default function CreatQuestion(props) {
       }
       //checking whether a selected answer is not just an empty box
       if (
-        currentQuestion[i].answers[currentQuestion[i].correctAnswer] == "" ||
-        currentQuestion[i].answers[currentQuestion[i].correctAnswer] == null
+        (currentQuestion[i].answers[currentQuestion[i].correctAnswer] == "" ||
+          currentQuestion[i].answers[currentQuestion[i].correctAnswer] ==
+            null) &&
+        currentQuestion[i].answers.length != 0
       ) {
         errorStack.push(
           `• You must select a valid correct answer for question ${currentQuestion[i].questionNumber}`
@@ -102,11 +113,11 @@ export default function CreatQuestion(props) {
     fetch("/api/v1/image-service/uploadimage", {
       credentials: "include",
       method: "POST",
+      headers:{"Authorization":`Bearer ${jwt}`},
       body: body,
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         const tempArr = [...currentQuestion];
         tempArr[index].image = responseJson;
         setCurrentQuestion(tempArr);
@@ -157,7 +168,6 @@ export default function CreatQuestion(props) {
 
   //method that sets the correct answer
   const setCorrectAnswer = (e, i, j) => {
-    console.log(e.target.value, j);
     const question = currentQuestion[i];
     question.correctAnswer = j;
 
@@ -238,20 +248,22 @@ export default function CreatQuestion(props) {
   }
 
   function returnImageURL(i) {
-    if (imageArray[i] === undefined) {
-      return "";
-    }
-    return URL.createObjectURL(imageArray[i]);
+    // if (imageArray[i] === undefined) {
+    //   return "";
+    // }
+
+    const token = currentQuestion[i].image;
+    return `/api/v1/image-service/getimage/token=${token}`;
   }
 
   return (
     <div id="questionsContainer">
       {currentQuestion.map((question, i) => (
-        <>
+        <div key={i}>
           {questionMinimized[i] == true ? (
             renderMinimizedQuestion(question)
           ) : (
-            <div lol={i} key={i} id="question">
+            <div key={i} id="question">
               <div id="questionRemoveContainer">
                 <div id="questionHeading">
                   Question {question.questionNumber}
@@ -262,23 +274,23 @@ export default function CreatQuestion(props) {
                     className="addNewAnswerButton"
                     onClick={(event) => addNewAnswer(event, i)}
                   >
-                    <AddBoxIcon/>
+                    <AddBoxIcon />
                     New Answer Choice
                   </CustomButton>
                   <CustomButton
                     id="uploadFileButton"
                     onClick={(event) => handleUploadClick(event, i)}
                   >
-                    <UploadIcon/>
-                    {question.image == undefined
-                      ? "Add image from file"
+                    <UploadIcon />
+                    {question.image == undefined || question.image == null
+                      ? "Insert image from file"
                       : "Change image from file"}
-
                   </CustomButton>
                   <CustomButton
-                  id="insertFromPdfButton"
+                    id="insertFromPdfButton"
                     onClick={(event) => handleUploadFromPdfClick(event, i)}
                   >
+                    <PictureAsPdfIcon />
                     Insert image from pdf
                   </CustomButton>
                 </div>
@@ -304,19 +316,6 @@ export default function CreatQuestion(props) {
               </div>
 
               <div id="pictureContainer">
-                {/* <CustomButton
-                  id="uploadFileButton"
-                  onClick={(event) => handleUploadClick(event, i)}
-                >
-                  {question.image == undefined
-                    ? "Upload Image"
-                    : "Change Image"}
-                </CustomButton>
-                <CustomButton
-                  onClick={(event) => handleUploadFromPdfClick(event, i)}
-                >
-                  Insert image from pdf
-                </CustomButton> */}
                 <input
                   type="file"
                   required
@@ -325,7 +324,8 @@ export default function CreatQuestion(props) {
                   style={{ display: "none" }}
                   onChange={(event) => fileHandler(event, i)}
                 />
-                {imageArray[i] === undefined ? null : (
+                {question.image === undefined ||
+                question.imag === null ? null : (
                   <img id="questionImage" src={returnImageURL(i)}></img>
                 )}
               </div>
@@ -357,7 +357,7 @@ export default function CreatQuestion(props) {
               ></CustomTextArea>
               <div id="answersContainer">
                 {question.answers.map((answer, j) => (
-                  <div key={j} id="answerChoice">
+                  <div key={`${i},${j}`} id="answerChoice">
                     <input
                       type="radio"
                       name={`radAnswer${(i, j)}`}
@@ -386,17 +386,10 @@ export default function CreatQuestion(props) {
                 ) : (
                   <div id="checkBoxToolTip"></div>
                 )}
-                {/* <CustomButton
-                  id="addNewAnswerButton"
-                  className="addNewAnswerButton"
-                  onClick={(event) => addNewAnswer(event, i)}
-                >
-                  Add new answer
-                </CustomButton> */}
               </div>
             </div>
           )}
-        </>
+        </div>
       ))}
 
       <>
@@ -411,7 +404,7 @@ export default function CreatQuestion(props) {
         </div>
       </>
 
-      <Dialog fullWidth maxWidth={400} open={pdfDialogOpen}>
+      <Dialog fullWidth maxWidth={"600px"} open={pdfDialogOpen}>
         <DialogContent>
           <PdfViewer
             currentPdf={currentPdf}
@@ -420,15 +413,6 @@ export default function CreatQuestion(props) {
             setDialog={(parameter) => setPdfDialogOpen(parameter)}
           />
         </DialogContent>
-        {/* <DialogActions id="deleteDialogActions">
-          <CustomButton id="deleteButton" onClick={handleFileFromPdf}>
-            Add picture
-          </CustomButton>
-          {pdfErrorText}
-          <CustomButton onClick={(event) => setPdfDialogOpen(false)}>
-            Cancel
-          </CustomButton>
-        </DialogActions> */}
       </Dialog>
     </div>
   );

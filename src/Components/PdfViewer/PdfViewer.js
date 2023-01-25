@@ -179,9 +179,6 @@ export default function PdfViewer(props) {
               </Document>
             </div>
           </div>
-          {/* <div id="previewContainer">
-            <img id="previewImage" src={imageURL}></img>
-          </div> */}
         </div>
       )}
       <div id="pdfUploadContainer">
@@ -216,12 +213,6 @@ export default function PdfViewer(props) {
             <CustomButton id="pdfDialogButton" onClick={takeScreenshot}>
               Take Screenshot
             </CustomButton>
-            {/* <CustomButton
-              id="uploadFileButton"
-              onClick={(event) => props.setDialog(false)}
-            >
-              Close
-            </CustomButton> */}
           </>
         )}
           <CustomButton

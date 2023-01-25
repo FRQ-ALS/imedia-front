@@ -12,14 +12,12 @@ import {
   Route,
   useNavigate,
 } from "react-router-dom";
-import SignUp from "./Components/SignUp/SignUp";
-import EmailVerification from "./Components/EmailVerification/EmailVerification";
-import ProjectView from "./Components/ProjectView/ProjectView";
-import AddProjectPage from "./Components/AddProjectPage/AddProjectPage";
-import JoinProjectCard from "./Components/JoinProjectCard/JoinProjectCard";
+import AssessmentPage from "./Components/AssessmentPage/AssessmentPage";
 import LoginWindow from "./Components/LoginWindow/LoginWindow";
 import CustomAlert from "./Components/CustomAlert/CustomAlert";
 import useAuth from "./Hooks/AuthHook";
+import PageRedirect from "./Components/PageRedirect/PagRedirect";
+
 
 
 
@@ -35,13 +33,12 @@ function App() {
           <AppBar setLogin={auth} />
           <CustomAlert id="alert"/>
           <Routes>
-            <Route path="/signup" element={<SignUp/>}/>
+            {auth===false ? <Route path="/*" element={<LoginWindow/>}/> : <>
             <Route path="/dashboard" element={<Dashboard/>}/>
-            <Route exact path="/verify/:token" element={<EmailVerification/>}/>
-            <Route exact path="/joinProject=:token" element={<JoinProjectCard/>}/>
-            <Route exact path="/project/:id" element={<ProjectView/>}/>
-            <Route exact path="/new:token" element={<AddProjectPage/>}/>
-            <Route path="/login" element={<LoginWindow/>}/>
+            <Route exact path="/assessment-builder/:token" element={<AssessmentPage/>}/>
+            <Route path="*" element={<PageRedirect/>}/>
+            </>
+              }
           </Routes>
         </ThemeProvider>
     </div>

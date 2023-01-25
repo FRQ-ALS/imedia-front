@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./AddProjectPage.css";
+import "./AssessmentPage.css";
 import CustomTextField from "../TextField/CustomTextField";
 import { useNavigate, useParams } from "react-router-dom";
 import useAlert from "../../Hooks/AlertHook";
@@ -12,43 +12,59 @@ import pdfdocument from "../../health.pdf"
 // import Pdf from "@mikecousins/react-pdf";
 
 import PdfViewer from "../PdfViewer/PdfViewer";
-
-const options = {
-  cMapUrl: 'cmaps/',
-  cMapPacked: true,
-  standardFontDataUrl: 'standard_fonts/',
-};
+import { ClosedCaptionDisabledOutlined } from "@mui/icons-material";
 
 
 const subjects = [
-  {value:'maths',label:'Maths'},
-  {value:'science', label:'Science'},
-  {value:'english',label:'English'}
+  {value:'Maths',label:'Maths'},
+  {value:'Science', label:'Science'},
+  {value:'English',label:'English'}
 ]
+
 
 const examTypes = [
-  {value:'exam',label:'Exam'},
-  {value:'quiz', label:'Quiz'},
-  {value:'homework',label:'Homework'}
+  {value:'Exam',label:'Exam'},
+  {value:'Quiz', label:'Quiz'},
+  {value:'Homework',label:'Homework'}
 ]
 
-export default function AddProjectPage(props) {
+export default function AssessmentPage(props) {
   const { setAlert } = useAlert();
-  var jwt = localStorage.getItem("jwt");
-
   const params = useParams()
-  console.log(params.token)
 
   const [questionsArray, setQuestionsArray] = useState([]);
-  const [name, setName] = useState();
-  const [type, setType] = useState();
-  const [subject, setSubject] = useState();
+  const [name, setName] = useState("");
+  const [typeSelect, setType] = useState({label:"Type", value:"Type"});
+  const [subjectSelect, setSubject] = useState({label:"Subject", value:"Subject"});
+  const [assessmentToken, setAssesmentToken] = useState()
 
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+  const jwt = document.cookie.split("=")[1]
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
+
+  useEffect(()=>{
+    getAssessment()
+  },[])
+
+  const getAssessment = () => {
+    const token = params.token
+    fetch(`/api/v1/account/getAssessment/${token}`,
+    {
+      credentials:"include",
+      method:"GET",
+      headers:{"Authorization":`Bearer ${jwt}`},
+    }).then((response)=>{
+      if(response.status!=200){
+        return
+      }
+      response.json().then((responseJson)=>{
+        console.log(responseJson)
+        setType({label:responseJson.type, value:responseJson.type})
+        setSubject({label:responseJson.subject, value:responseJson.subject})
+        setName(responseJson.name)
+        setQuestionsArray(responseJson.questionsArray)
+      })
+
+    })
   }
 
   const navigate = useNavigate();
@@ -58,11 +74,11 @@ export default function AddProjectPage(props) {
   };
 
   const handleTypeChange = (e) => {
-    setType(e.value);
+    setType({label:e.value, value:e.value});
   };
 
   const handleSubjectChange = (e) => {
-    setSubject(e.value);
+    setSubject({label:e.value, value:e.value});
   };
 
   const handleCopyButton = (e) => {
@@ -75,17 +91,16 @@ export default function AddProjectPage(props) {
 
   const handleGetQuestions = (questionsArray) => {
     const token = params.token
+    const type = typeSelect.value
+    const subject = subjectSelect.value
     var body = { name, type, subject, questionsArray, token};
-    
-    // if()
-    console.log(body)
 
     fetch("/api/v1/account/post", {
       credentials: "include",
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        // Authorization: `Bearer ${jwt}`,
+        Authorization: `Bearer ${jwt}`,
       },
       body: JSON.stringify(body),
     }).then((response)=>{
@@ -101,20 +116,20 @@ export default function AddProjectPage(props) {
           <ArrowBackIcon />
           Dashboard
         </CustomButton>
-        {/* Test Name: */}
         <CustomTextField
           id="testName"
           className="textfield"
           placeholder="Test Name*"
           onChange={handleNameChange}
+          value={name}
         />
         Subject: 
-        <Select onChange={handleSubjectChange} options={subjects} styles={{height:'100px'}} id="selector"/>
+        <Select value={subjectSelect} onChange={handleSubjectChange} options={subjects} styles={{height:'100px'}} id="selector"/>
         Assessment Type: 
-        <Select onChange={handleTypeChange} options={examTypes} styles={{height:'100px'}} id="selector"/>
+        <Select value={typeSelect} onChange={handleTypeChange} options={examTypes} styles={{height:'100px'}} id="selector"/>
       </div>
       {/* <PdfViewer/> */}
-      <CreatQuestion getQuestions={handleGetQuestions} />
+      <CreatQuestion setQuestionsArray={questionsArray} assessmentToken={params.token} getQuestions={handleGetQuestions} />
     </div>
   );
 }

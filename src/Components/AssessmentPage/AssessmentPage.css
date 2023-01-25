@@ -143,5 +143,14 @@ width: 200px;
 
 }
 
+#testName{
+  background-color: white;
+  outline: 1px solid rgba(0, 0, 0, 0.2) !important;
+  height: 35px;
+  color: black;
+  font-size: 1em;
+  width: 300px;
+}
+
 
 

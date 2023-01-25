@@ -3,7 +3,6 @@ import React, { useState, useEffect } from "react";
 import "./AppBar.css";
 import MapsHomeWorkRoundedIcon from "@mui/icons-material/MapsHomeWorkRounded";
 import { useNavigate } from "react-router-dom";
-import LoginWindow from "../LoginWindow/LoginWindow";
 import ProfilePill from "../ProfilePill/ProfilePill";
 import NotificationTray from "../NotificationTray/NotificationTray";
 import useAuth from "../../Hooks/AuthHook";
@@ -20,10 +19,6 @@ export default function Appbar(props) {
     navigate("/login")
   };
 
-  const signUpHandler = () => {
-    setLoginWindowToggle(false);
-    navigate("/signup");
-  };
 
   const homePageHandler = () => {
     navigate("/home");
@@ -51,13 +46,6 @@ export default function Appbar(props) {
         
             >
               SIGN IN
-            </CustomButton>
-
-            <CustomButton
-              id="signInButton"
-              onClick={signUpHandler}
-            >
-              SIGN UP
             </CustomButton>
           </div>
         ) : (

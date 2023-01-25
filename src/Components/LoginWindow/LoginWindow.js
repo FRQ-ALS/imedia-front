@@ -1,40 +1,37 @@
-import React, { useState, useEffect, } from "react";
+import React, { useState, useEffect } from "react";
 import CustomTextField from "./../TextField/CustomTextField";
 import "./LoginWindow.css";
 import useAuth from "../../Hooks/AuthHook";
 import useAlert from "../../Hooks/AlertHook";
 import { useNavigate } from "react-router-dom";
-import CustomButton from "../CustomButton/CustomButton"
+import CustomButton from "../CustomButton/CustomButton";
 
 export default function LoginWindow(props) {
   const className = "window " + props.className;
-  const {setAuth, auth} = useAuth();
-  const {setAlert} = useAlert();
+  const { setAuth, auth } = useAuth();
+  const { setAlert } = useAlert();
   const navigate = useNavigate();
 
-
-
-useEffect(()=>{
-  let x = JSON.parse(localStorage.getItem("loggedIn"));
-
-  if(x === true) {
-    navigate("/home")
-  }
-  
-},[])
-
+  useEffect(() => {
+    let x = JSON.parse(localStorage.getItem("loggedIn"));
+    if (x === true) {
+      navigate("/dashboard");
+    }
+  }, []);
 
   const [login, setLogin] = useState({
-    email: "",
+    username: "",
     password: "",
   });
 
   const handleLoginChange = (e) => {
     setLogin({ ...login, [e.target.name]: e.target.value });
+    console.log(login);
   };
 
   const handleLoginSubmit = (e) => {
-    fetch("api/v1/account/authenticate", {
+    console.log(login);
+    fetch("/api/v1/account/login", {
       credentials: "include",
       method: "POST",
       headers: {
@@ -42,19 +39,22 @@ useEffect(()=>{
       },
       body: JSON.stringify(login),
     }).then((response) => {
-      console.log(response)
+      console.log(response);
       if (response.status != 200) {
-      setAlert("Incorrect username/password. Please try again", "error")
+        setAlert("Incorrect username/password. Please try again", "error");
         return;
       }
 
-      if(response.ok){
-        setAuth(true)
-        localStorage.setItem("loggedIn", true)
-        navigate("/home")
+      if (response.ok) {
+        setAuth(true);
+        localStorage.setItem("loggedIn", true);
+        navigate("/dashboard");
         response.json().then((responseJson) => {
-          console.log(responseJson.jwt)
-          localStorage.setItem("jwt", responseJson.jwt);
+          let date = new Date();
+          date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
+          let expires = "expires=" + date.toUTCString();
+          document.cookie = "jwt=" + responseJson.jwt + "; " + expires + "; path=/; secure";
+
         });
       }
     });
@@ -66,13 +66,13 @@ useEffect(()=>{
         <CustomTextField
           id="emailField"
           onChange={handleLoginChange}
-          name="email"
+          name="username"
           placeholder="Username"
           className="login"
         ></CustomTextField>
 
         <CustomTextField
-          id="passwordField"
+          id="emailField"
           onChange={handleLoginChange}
           name="password"
           type="password"

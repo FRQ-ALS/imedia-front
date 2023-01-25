@@ -1,19 +1,19 @@
 import React, { useState} from "react";
 import { useNavigate } from "react-router-dom";
-import "./ProjectTaskBar.css";
+import "./AssesskentTaskBar.css";
 import SearchIcon from "@mui/icons-material/Search";
 import AddIcon from "@mui/icons-material/Add";
 import { v4 as uuidv4 } from 'uuid';
 
-export default function ProjectTaskBar() {
+export default function AssessmentTaskBar() {
   const [searchOpen, setSearchOpen] = useState(false)
 
   const navigate = useNavigate()
 
   const handleAddButton = () => {
     const token = uuidv4()
-
-    navigate(`/new${token}`)
+    
+    navigate(`/assessment-builder/${token}`)
   };
 
   const handleSearchButton = () => {

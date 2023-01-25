@@ -20,7 +20,7 @@
     background-color: transparent !important;
 }
 .textfield:-webkit-autofill{
-    -webkit-text-fill-color: white !important;
+    -webkit-text-fill-color: black !important;
 }
 
 .textfield:focus {
@@ -45,6 +45,7 @@
     color: white;
     opacity: 0.2;
 }
+
 
 
 @keyframes shake {

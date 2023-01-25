@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 
-import Sidebar from "../Sidebar/Sidebar";
-import Projects from "../Projects/Projects";
-import AreaSelector from "../AreaSelector/AreaSelector"
+import AssessmentView from "../AssessmentView/AssessmentView";
 
 export default function Dashboard() {
 
 
   return(
     <div id="dashboard-container">
-      <Projects id="projects"/>
+      <AssessmentView id="projects"/>
     </div>
   )
 }
