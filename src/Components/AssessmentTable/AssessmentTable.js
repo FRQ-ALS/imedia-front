@@ -10,13 +10,57 @@ import Custombutton from "../CustomButton/CustomButton"
 import EditIcon from '@mui/icons-material/Edit';
 import PublishIcon from '@mui/icons-material/Publish';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import { Dialog } from "@mui/material";
+import {DialogContent} from "@mui/material";
+import {DialogActions} from "@mui/material";
+import {DialogTitle} from "@mui/material";
+import {Select} from "@mui/material";
+import makeAnimated from 'react-select/animated';
 export default function TableView(props) {
   const [assessmentData, setAssessmentData] = useState([]);
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const [selectedToken, setSelectedToken] = useState("")
+  const [selectedTitle, setSelectedTitle] = useState("")
   const navigate = useNavigate()
+
+  const animatedComponents = makeAnimated();
 
   const handleEditButton= (e, token) => {
     navigate(`/assessment-builder/${token}`)
   }
+
+  const jwt = document.cookie.split("=")[1]
+  const publishAssessment = (event, token) =>{
+    const todaysDate = new Date()
+    const tomorrowDate = new Date()
+    tomorrowDate.setDate(tomorrowDate.getDate() + 1)
+    let start = todaysDate.toJSON()
+    let expiry = tomorrowDate.toJSON()
+    let lengthMinutes = 60;
+
+    let assessmentToken = token
+
+    let body = {assessmentToken, start, expiry, lengthMinutes}
+
+    console.log(body)
+
+
+    fetch("/api/v1/publication/create",
+    {credentials:"include",
+      method:"POST",
+      headers:{"Authorization":`Bearer ${jwt}`, "Content-Type":"application/json"},
+      body:JSON.stringify(body)
+    }).then((response)=>response.json()).then((responseJson)=>{
+      console.log(responseJson)
+    })
+
+  }
+
+  // const handlePublishButton =(event) => {
+  //   setDialogOpen(open)
+    
+  // }
 
   useEffect(() => {
     setAssessmentData(props.data);
@@ -40,13 +84,21 @@ export default function TableView(props) {
                 <EditIcon/>
                 Edit
                 </Custombutton>
-                <Custombutton id="editButton">
+                <Custombutton onClick={event=>{
+                  setSelectedToken(item.token)
+                  setSelectedTitle(item.name)
+                  setDialogOpen(true)
+                }} id="editButton">
                 <PublishIcon/>
                 Publish
                 </Custombutton>
                 <Custombutton id="editButton">
                   <DeleteIcon/>
                 Delete
+                </Custombutton>
+                <Custombutton onClick={event=>console.log("Hello")} id="editButton">
+                  <ZoomInIcon/>
+                Quick view
                 </Custombutton>
             </div>
           </div>
@@ -57,7 +109,40 @@ export default function TableView(props) {
 
   return (
     <div id="assessmentlist">
-      {assessmentData.length === 0 ? "Loading..." : renderAssessments()}
+      {assessmentData.length === 0 ? "No data found..." : renderAssessments()}
+      <Dialog open={dialogOpen}>
+      <DialogTitle style={{textAlign: "center"}} >Publish {selectedTitle}?</DialogTitle>
+        <DialogContent >
+          <div id="publishDialogBody">
+          <div id="publishDialogInput">
+            <span>Start Date</span>
+            <input type="datetime-local"></input>
+          </div>
+
+          <div id="publishDialogInput">
+            <span>Expiry Date</span>
+            <input type="datetime-local"></input>
+          </div>
+
+          <div id="publishDialogInput">
+            <span>Length (minutes)</span>
+            <input type="number"></input>
+          </div>
+
+          <div id="publishDialogInput">
+            <span>Students:</span>
+            <Select isMulti
+            components={animatedComponents}/>
+          </div>
+
+          </div>
+    
+        </DialogContent>
+        <DialogActions>
+          <Custombutton>Submit</Custombutton>
+          <Custombutton onClick={event=>setDialogOpen(false)}>Cancel</Custombutton>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
