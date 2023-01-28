@@ -22,10 +22,13 @@ export default function AssessmentTaskBar() {
 
   return (
     <div id="mainContainer">
-      <div id="taskbar-container">
-        <SearchIcon onClick={handleSearchButton} id="search" className="true" />
+      <div id="taskBarContainer">
+        <p id="draftsLabel">DRAFTS</p>
+        <div id="iconsContainer">
+        <SearchIcon onClick={handleSearchButton} id="search" className="true"/>
         {searchOpen ? <input id="input"></input> : null}
         <AddIcon onClick={handleAddButton} className="button" />
+        </div>
       </div>
       </div>
   );

@@ -59,7 +59,15 @@
 }
 
 #homeLabelContainer{
+  margin-left: 20px;
   display: flex;
   justify-content: center;
   flex-direction: row;
+  gap: 20px;
+}
+
+#imediaImage{
+  aspect-ratio: auto;
+  max-height: 40px;
+  cursor: pointer;
 }

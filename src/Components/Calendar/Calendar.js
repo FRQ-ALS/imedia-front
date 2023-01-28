@@ -38,7 +38,6 @@ export default function () {
     getData()
   },[])
 
-  // console.log(new Date(publications.expiry).toDateString().slice(0,3))
 
 
   const getData =() => {  
@@ -52,6 +51,8 @@ export default function () {
     // var date = new Date(responseJson.expiry)
   })
 }
+
+
 
 
 
@@ -83,7 +84,12 @@ export default function () {
           {daysDictionary.get(coordinates[0]) == new Date(publication.expiry).toDateString().slice(0,3)
             && compareTwoDates(days[coordinates[0]], new Date(publication.expiry)) && coordinates[1]==
             new Date(publication.expiry).getHours()
-            ? <div id="entry">Maths Exam 2023</div> : null}
+            ? <div id="entry">
+              {publication.assessment.subject}
+              <br></br>
+              {publication.assessment.type}
+
+            </div> : null}
             </div>
       ))}
     

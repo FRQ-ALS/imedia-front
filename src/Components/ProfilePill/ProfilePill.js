@@ -84,7 +84,7 @@ export default function ProfilePill(props) {
         id="profilePillContainer"
       >
         <MoreVertIcon />
-        {/* <img id="profilePicture" src={profileImage}></img> */}
+        <img id="profilePicture" src="https://fastly.picsum.photos/id/913/200/200.jpg?hmac=MQWqYyJuxoagkUNdhY5lwuKw7QwcqzMEm4otshKpUWQ"></img>
         <h1 id="profileName">
           {user === null
             ? ""

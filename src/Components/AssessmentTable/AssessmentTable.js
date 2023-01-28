@@ -15,15 +15,21 @@ import { Dialog } from "@mui/material";
 import {DialogContent} from "@mui/material";
 import {DialogActions} from "@mui/material";
 import {DialogTitle} from "@mui/material";
-import {Select} from "@mui/material";
+import Select from 'react-select'
+
 import makeAnimated from 'react-select/animated';
-export default function TableView(props) {
+export default function   TableView(props) {
   const [assessmentData, setAssessmentData] = useState([]);
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedToken, setSelectedToken] = useState("")
   const [selectedTitle, setSelectedTitle] = useState("")
   const navigate = useNavigate()
 
+  const options = [
+    { value: 'chocolate', label: 'Chocolate' },
+    { value: 'strawberry', label: 'Strawberry' },
+    { value: 'vanilla', label: 'Vanilla' }
+  ]
   const animatedComponents = makeAnimated();
 
   const handleEditButton= (e, token) => {
@@ -57,10 +63,6 @@ export default function TableView(props) {
 
   }
 
-  // const handlePublishButton =(event) => {
-  //   setDialogOpen(open)
-    
-  // }
 
   useEffect(() => {
     setAssessmentData(props.data);
@@ -69,7 +71,7 @@ export default function TableView(props) {
 
   function renderAssessments() {
     return (
-      <div>
+      <div id="draftsContainer">
         {assessmentData.map((item, index) => (
           <div key={index} id="assessmentContainer">
             <div id="assessmentHeading">{item.name}</div>
@@ -87,6 +89,7 @@ export default function TableView(props) {
                 <Custombutton onClick={event=>{
                   setSelectedToken(item.token)
                   setSelectedTitle(item.name)
+                  publishAssessment(event, item.token)
                   setDialogOpen(true)
                 }} id="editButton">
                 <PublishIcon/>
@@ -109,7 +112,7 @@ export default function TableView(props) {
 
   return (
     <div id="assessmentlist">
-      {assessmentData.length === 0 ? "No data found..." : renderAssessments()}
+      {assessmentData.length === 0 ? <div id="noDataLabel">No data found</div> : renderAssessments()}
       <Dialog open={dialogOpen}>
       <DialogTitle style={{textAlign: "center"}} >Publish {selectedTitle}?</DialogTitle>
         <DialogContent >
@@ -131,8 +134,7 @@ export default function TableView(props) {
 
           <div id="publishDialogInput">
             <span>Students:</span>
-            <Select isMulti
-            components={animatedComponents}/>
+            <Select isMulti options={options}/>
           </div>
 
           </div>
