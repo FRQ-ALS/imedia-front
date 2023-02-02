@@ -61,6 +61,7 @@ export default function AssessmentPage(props) {
         setSubject({label:responseJson.subject, value:responseJson.subject})
         setName(responseJson.name)
         setQuestionsArray(responseJson.questionsArray)
+        console.log(responseJson)
       })
 
     })

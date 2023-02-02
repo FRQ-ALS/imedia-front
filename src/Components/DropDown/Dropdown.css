@@ -1,0 +1,39 @@
+#dropDown{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#dropDownTitle{
+    color: white;
+    font-weight: bold;
+    font-size: 1.4em;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 5px 0px;
+    border-radius: 10px;
+    cursor: pointer;
+    /* gap: 5px; */
+}
+
+#itemsContainer{
+    padding: 10px 40px;
+    background-color: white;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 2;
+    box-shadow: 0 0 1px rgb(0, 0, 0);
+
+}
+
+
+#dropDownItem{
+    cursor: pointer;
+    font-weight: bold;
+    user-select: none;
+}

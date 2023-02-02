@@ -71,3 +71,25 @@
   max-height: 40px;
   cursor: pointer;
 }
+
+#linksContainer{
+  display: flex;
+  flex-direction: row;
+  margin-left: 40px;
+  gap: 30px;
+}
+
+#link{
+  color: white;
+  font-weight: bold;
+  font-size: 1.4em;
+  display:flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  /* padding: 5px 10px; */
+  /* background-color: green; */
+  border-radius: 10px;
+  cursor: pointer;
+  gap: 10px;
+}

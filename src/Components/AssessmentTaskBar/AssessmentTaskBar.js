@@ -26,8 +26,10 @@ export default function AssessmentTaskBar() {
         <p id="draftsLabel">DRAFTS</p>
         <div id="iconsContainer">
         <SearchIcon onClick={handleSearchButton} id="search" className="true"/>
+        Search
         {searchOpen ? <input id="input"></input> : null}
         <AddIcon onClick={handleAddButton} className="button" />
+        Create New Assessment
         </div>
       </div>
       </div>

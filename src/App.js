@@ -17,6 +17,7 @@ import LoginWindow from "./Components/LoginWindow/LoginWindow";
 import CustomAlert from "./Components/CustomAlert/CustomAlert";
 import useAuth from "./Hooks/AuthHook";
 import PageRedirect from "./Components/PageRedirect/PagRedirect";
+import BehaviourView from "./Components/BehaviourView/BehaviourView";
 
 
 
@@ -37,6 +38,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route exact path="/assessment-builder/:token" element={<AssessmentPage/>}/>
             <Route path="*" element={<PageRedirect/>}/>
+            <Route path="/behaviour" element={<BehaviourView/>}/>
+
             </>
               }
           </Routes>

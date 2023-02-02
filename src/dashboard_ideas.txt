@@ -8,3 +8,8 @@ Data security and privacy (e.g. secure login, data encryption, compliance with d
 Integration with other systems (e.g. learning management systems, student information systems)
 Customizable branding and layout
 Mobile friendly and responsive design
+
+
+function keywordSearch(items, keyword) {
+  return items.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
+}

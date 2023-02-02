@@ -1,11 +1,12 @@
 import React from "react";
-import './CustomTextArea.css'
+import "./CustomTextArea.css";
 
 export default function CustomTextArea(props) {
   const classes = "textarea " + props.className;
 
   return (
     <textarea
+      style={props.style}
       id={props.id}
       onChange={props.onChange}
       className={classes}

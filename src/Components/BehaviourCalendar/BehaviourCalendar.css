@@ -1,0 +1,96 @@
+#behaviourCalendarContainer {
+  margin-top: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 100px;
+} 
+
+#termButtonsContainer{
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+#termButton{
+    height: 40px;
+    width: 100px;
+    color: rgb(30, 135, 188);
+    font-weight: bold;
+    outline: 2px solid rgb(30, 135, 188)
+}
+
+.selectedTermButton{
+    background-color: rgb(30, 135, 188) !important;
+    color: white !important;
+
+
+}
+
+#calendarDayHeading {
+  background-color: rgb(30, 135, 188);
+  position: sticky;
+  top: 0;
+}
+
+#calendarDay {
+  opacity: 0.4;
+}
+
+#halfTermCell {
+  background-color: grey;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  font-style: italic;
+}
+
+table {
+  border-collapse:collapse;
+}
+
+th {
+  text-align: center;
+}
+
+#calendarDayContainer {
+  height: 70px;
+  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  border-right: 1px solid black; 
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#calendarRow{
+  border-bottom: 1px solid black;
+
+
+}
+
+#studentLabel{
+  color: rgb(30, 135, 188);
+  font-weight: bold;
+  font-size: 2em;
+  margin-bottom: 20px;
+  border-bottom: 1px solid rgb(30, 135, 188);
+  font-family: Helvetica;
+  animation: appear 200ms ease-in-out;
+}
+
+
+@keyframes appear{
+  0%{
+    opacity: 0;
+    top: -60px;
+  }
+
+  100%{
+    opacity: 1;
+    top: 0px;
+  }
+}

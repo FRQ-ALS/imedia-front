@@ -6,8 +6,11 @@ import { useNavigate } from "react-router-dom";
 import ProfilePill from "../ProfilePill/ProfilePill";
 import NotificationTray from "../NotificationTray/NotificationTray";
 import useAuth from "../../Hooks/AuthHook";
-import CustomButton from "../CustomButton/CustomButton"
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import CustomButton from "../CustomButton/CustomButton";
+import Dropdown from "../DropDown/Dropdown";
 
+const options = ["Science", "Maths", "English"];
 
 export default function Appbar(props) {
   const [loginWindowToggle, setLoginWindowToggle] = useState(false);
@@ -16,9 +19,8 @@ export default function Appbar(props) {
   let navigate = useNavigate();
 
   const signInHandler = () => {
-    navigate("/login")
+    navigate("/login");
   };
-
 
   const homePageHandler = () => {
     navigate("/home");
@@ -28,29 +30,32 @@ export default function Appbar(props) {
     setNotiTrayToggle(!notiTrayToggle);
   };
 
-
   return (
     <div>
       <div variant="regular" className="main">
         <div id="homeLabelContainer" className="home-container">
-            <img onClick={homePageHandler} id="imediaImage" src="https://static.wixstatic.com/media/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png/v1/fill/w_385,h_192,al_c,lg_1,q_85,enc_auto/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png"></img>
-            <label id="imediaLabel">iMedia School Portal</label>
+          <img
+            onClick={homePageHandler}
+            id="imediaImage"
+            src="https://static.wixstatic.com/media/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png/v1/fill/w_385,h_192,al_c,lg_1,q_85,enc_auto/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png"
+          ></img>
+          <label id="imediaLabel">iMedia School Portal</label>
         </div>
+
         {!props.setLogin ? (
           <div className="login-container">
-            <CustomButton
-              id="signInButton"
-              onClick={signInHandler}
-        
-            >
+            <CustomButton id="signInButton" onClick={signInHandler}>
               SIGN IN
             </CustomButton>
           </div>
         ) : (
-          <ProfilePill
-            onToggleNotiTray={handleToggleNotiTray}
-            // onSetLoggedInStatus={handleLoggedInStatus}
-          />
+          <>
+            <div id="linksContainer">
+              <Dropdown id="dropDownAppBar" items={options} />
+              <div id="link">Behaviour</div>
+            </div>
+            <ProfilePill onToggleNotiTray={handleToggleNotiTray} />
+          </>
         )}
       </div>
 

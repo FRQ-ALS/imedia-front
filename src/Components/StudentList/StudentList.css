@@ -1,0 +1,41 @@
+.studentContainer {
+  height: calc(100vh - headerHeight - footerHeight);
+  background-color: rgb(30, 135, 188);
+  position: sticky;
+  top: 0;
+  padding: 10px 10px;
+}
+#studentItem {
+  color: white;
+  font-weight: lighter;
+  cursor: pointer;
+}
+
+#studentListHeading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: white;
+  font-weight: bold;
+  border-bottom: 0.5px solid white;
+}
+
+th {
+  color: white;
+  text-align: left;
+}
+
+#studentHeading {
+  font-size: 2em;
+}
+
+td {
+  text-align: left;
+}
+
+.selectedStudent {
+  border-bottom: 2px solid white;
+  border-radius: 10px;
+  font-size: 1.1em;
+  font-weight: bold !important;
+}

@@ -8,7 +8,7 @@ import AssessmentIcon from "@mui/icons-material/Assessment";
 import PsychologyIcon from "@mui/icons-material/Psychology";
 export default function Sidebar(props) {
   const [sideBarExtended, setSideBarExtended] = useState(true);
-  const [selectedButton, setSelectedButton] = useState();
+  const [selectedButton, setSelectedButton] = useState("assessmentButton");
 
 
   const handleToggleExtension = (e) => {
