@@ -13,3 +13,18 @@ Mobile friendly and responsive design
 function keywordSearch(items, keyword) {
   return items.filter(item => item.name.toLowerCase().includes(keyword.toLowerCase()));
 }
+
+
+Class Report: Generate a report that provides an overview of the behavior of the entire class.
+
+School Report: Generate a report that provides an overview of the behavior of all students in the school.
+
+Attendance Tracker: Keep track of student attendance and display it in an easy-to-read format.
+
+Behaviour Trends: Track and display trends in student behavior over time, such as changes in the average number of points earned or incidents recorded.
+
+Behavior Categories: Group behaviors into categories and track the frequency of each type of behavior to identify patterns and areas for improvement.
+
+Comparison Tools: Compare the behavior of individual students, classes, or the entire school to identify areas of strength and weakness.
+
+Student-Teacher Communication: Provide a platform for teachers and students to communicate about behavior and performance, allowing for real-time feedback and coaching.

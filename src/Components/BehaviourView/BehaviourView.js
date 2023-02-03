@@ -6,6 +6,7 @@ import StudentList from "../StudentList/StudentList";
 import BehaviourCalendar from "../BehaviourCalendar/BehaviourCalendar";
 import CalendarEntry from "../CalendarEntry/CalendarEntry";
 import useAlert from "../../Hooks/AlertHook";
+import BehaviourHome from "../BehaviourHome/BehaviourHome";
 
 
 export default function BehaviourView(props) {
@@ -73,7 +74,9 @@ export default function BehaviourView(props) {
         setSelectedStudent={(student) => setSelectedStudent(student)}
         className="studentList"
       />
-      <BehaviourCalendar setDay={handleSetDay} student={selectedStudent} />
+
+      {selectedStudent!=null ? <BehaviourCalendar setDay={handleSetDay} student={selectedStudent} /> : <BehaviourHome/> }
+      
       <CalendarEntry
         data={calendarEntryData}
         setDialogOpen={(boolean) => setDialogOpen(boolean)}

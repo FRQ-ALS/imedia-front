@@ -9,12 +9,14 @@ import useAuth from "../../Hooks/AuthHook";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import CustomButton from "../CustomButton/CustomButton";
 import Dropdown from "../DropDown/Dropdown";
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 
 const options = ["Science", "Maths", "English"];
 
 export default function Appbar(props) {
   const [loginWindowToggle, setLoginWindowToggle] = useState(false);
   const [notiTrayToggle, setNotiTrayToggle] = useState(false);
+  const [appBarExtended, setAppBarExtended] = useState(false)
 
   let navigate = useNavigate();
 
@@ -31,8 +33,9 @@ export default function Appbar(props) {
   };
 
   return (
-    <div>
-      <div variant="regular" className="main">
+    <div className={appBarExtended ? "extended": "retracted"} id="appBarContainer">
+      <HomeRoundedIcon onClick={event =>setAppBarExtended(true)} style={{color:'white', marginTop:'50px', scale:'1.5'}}/>
+      {/* <div variant="regular" className="main">
         <div id="homeLabelContainer" className="home-container">
           <img
             onClick={homePageHandler}
@@ -57,25 +60,16 @@ export default function Appbar(props) {
             <ProfilePill onToggleNotiTray={handleToggleNotiTray} />
           </>
         )}
-      </div>
+      </div> */}
 
-      {/* {loginWindowToggle ? (
-        <div container className="loginWindowWrapper">
-          <LoginWindow
-            onSetLoggedInStatus={handleLoggedInStatus}
-            show={loginWindowToggle}
-            onClickOutside={(event) => setLoginWindowToggle(false)}
-            className="loginWindow"
-          />
-        </div>
-      ) : null} */}
 
-      <div className="notificationTrayWrapper">
+      {/* <div className="notificationTrayWrapper">
         <NotificationTray
           show={notiTrayToggle}
           onClickOutSide={(event) => setNotiTrayToggle(false)}
         />
-      </div>
+      </div> */}
+
     </div>
   );
 }
