@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { useFetcher } from "react-router-dom";
-
+import Person2RoundedIcon from '@mui/icons-material/Person2Rounded';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import "./StudentList.css";
 
 export default function StudentList(props) {
   const className = "studentContainer " + props.className
   const [studentData, setStudentData] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null)
+  const [dashboardSelected, setDashboardSelected] = useState(false)
 
   const jwt = document.cookie.split("=")[1];
 
   const handleStudentClick =(event, student) =>{
     props.setSelectedStudent(student)
     setSelectedStudent(student)
+
+    setDashboardSelected(false)
+
+  }
+
+  const handleSelectDashboard = () =>{
+    setSelectedStudent(null)
+    props.setSelectedStudent(null)
+    setDashboardSelected(true)
   }
 
   useEffect(() => {
@@ -37,24 +48,22 @@ export default function StudentList(props) {
 
   return (
     <div className={className}>
-      <table>
-        <thead>
-          <tr>
-            <th id="studentHeading">Students</th>
-          </tr>
-        </thead>
-
-        <tbody>
+          <label id="studentHeading">Behaviour</label>
+          <div onClick={handleSelectDashboard} id="dashBoardButton" className={dashboardSelected ?
+          "selectedStudent" : ""}>
+            <DashboardIcon/>
+            Dashboard
+          </div>
+          <label id="studentHeading">Students</label>
           {studentData.map((student, index) => (
-            <tr onClick={event => handleStudentClick(event, student)} key={index} id="studentNameRow">
-              <td id="studentItem" className={selectedStudent==student ? "selectedStudent": ""}>
+            <div className={selectedStudent==student ? "selectedStudent": ""} onClick={event => handleStudentClick(event, student)} key={index} id="studentNameRow">
+              <Person2RoundedIcon/>
+              <div id="studentItem" >
                 {student.firstName} {student.lastName}
-              </td>
-              <td>{student.enabled ? "Active" : "Inactive"}</td>
-            </tr>
+              </div>
+              {/* <td id="activeInactiveLabel">{student.enabled ? "Active" : "Inactive"}</td> */}
+            </div>
           ))}
-        </tbody>
-      </table>
     </div>
   );
 }

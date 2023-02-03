@@ -39,7 +39,6 @@ function App() {
             <Route exact path="/assessment-builder/:token" element={<AssessmentPage/>}/>
             <Route path="*" element={<PageRedirect/>}/>
             <Route path="/behaviour" element={<BehaviourView/>}/>
-
             </>
               }
           </Routes>

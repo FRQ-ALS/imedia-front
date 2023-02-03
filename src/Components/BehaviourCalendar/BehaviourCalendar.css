@@ -1,35 +1,49 @@
 #behaviourCalendarContainer {
-  margin-top: 20px;
-  width: 100%;
+  /* margin-top: 20px; */
+  /* width: 100%; */
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding-bottom: 100px;
-} 
-
-#termButtonsContainer{
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: row;
-    gap: 20px;
-}
-#termButton{
-    height: 40px;
-    width: 100px;
-    color: rgb(30, 135, 188);
-    font-weight: bold;
-    outline: 2px solid rgb(30, 135, 188)
+  justify-content: flex-start;
+  padding: 20px 50px;
 }
 
-.selectedTermButton{
-    background-color: rgb(30, 135, 188) !important;
-    color: white !important;
+#termButtonsContainer {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: row;
+  outline: 1px solid #d5212e;
+  width: 300px;
+  /* border-radius: 10px !important; */
+}
+#termButton1,
+#termButton2,
+#termButton3 {
+  height: 40px;
+  width: 100px;
+  color: #d5212e;
+  font-weight: bold;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
 
 
+#termButton2 {
+  border-right: 1px solid #d5212e;
+  border-left: 1px solid #d5212e;
+}
+
+.selectedTermButton {
+  position: inherit;
+  background-color: #d5212e !important;
+  color: white !important;
 }
 
 #calendarDayHeading {
   background-color: rgb(30, 135, 188);
+  background-color: #d5212e;
+  background-color: grey;
+
   position: sticky;
   top: 0;
 }
@@ -47,7 +61,7 @@
 }
 
 table {
-  border-collapse:collapse;
+  border-collapse: collapse;
 }
 
 th {
@@ -61,35 +75,33 @@ th {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  border-right: 1px solid black; 
+  /* border-right: 1px solid black;  */
   font-weight: bold;
   cursor: pointer;
 }
 
-#calendarRow{
-  border-bottom: 1px solid black;
-
-
+#calendarRow {
+  /* border-bottom: 1px solid black; */
 }
 
-#studentLabel{
-  color: rgb(30, 135, 188);
+#studentLabel {
+  color: #d5212e;
+  color: grey;
   font-weight: bold;
   font-size: 2em;
-  margin-bottom: 20px;
-  border-bottom: 1px solid rgb(30, 135, 188);
+  margin-bottom: 10px;
+  /* border-bottom: 1px solid rgb(30, 135, 188); */
   font-family: Helvetica;
-  animation: appear 200ms ease-in-out;
+  text-align: left;
 }
 
-
-@keyframes appear{
-  0%{
+@keyframes appear {
+  0% {
     opacity: 0;
     top: -60px;
   }
 
-  100%{
+  100% {
     opacity: 1;
     top: 0px;
   }

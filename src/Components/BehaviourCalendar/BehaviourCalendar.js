@@ -72,6 +72,8 @@ export default function BehaviourCalendar(props) {
   };
 
   return (
+    <>
+    {props.student!=null ? 
     <div id="behaviourCalendarContainer">
       {props.student != null ? (
         <label id="studentLabel">
@@ -80,36 +82,36 @@ export default function BehaviourCalendar(props) {
         </label>
       ) : null}
       <div id="termButtonsContainer">
-        <CustomButton
+        <button
           className={selectedButton == 1 ? "selectedTermButton" : ""}
           onClick={(event) => {
             generateWeeks(new Date(2022, 8, 5), new Date(2022, 11, 16));
             setSelectedButton(1);
           }}
-          id="termButton"
+          id="termButton1"
         >
           Term 1
-        </CustomButton>
-        <CustomButton
+        </button>
+        <button
           className={selectedButton == 2 ? "selectedTermButton" : ""}
-          id="termButton"
+          id="termButton2"
           onClick={(event) => {
             generateWeeks(new Date(2023, 0, 2), new Date(2023, 2, 31));
             setSelectedButton(2);
           }}
         >
           Term 2
-        </CustomButton>
-        <CustomButton
+        </button>
+        <button
           className={selectedButton == 3 ? "selectedTermButton" : ""}
-          id="termButton"
+          id="termButton3"
           onClick={(event) => {
             generateWeeks(new Date(2023, 3, 17), new Date(2023, 6, 31));
             setSelectedButton(3);
           }}
         >
           Term 3
-        </CustomButton>
+        </button>
       </div>
       <table>
         <thead>
@@ -125,5 +127,7 @@ export default function BehaviourCalendar(props) {
         <tbody>{renderWeeks()}</tbody>
       </table>
     </div>
+    : null}
+    </>
   );
 }
