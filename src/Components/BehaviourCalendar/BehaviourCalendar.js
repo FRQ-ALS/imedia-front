@@ -6,6 +6,7 @@ import CustomButton from "../CustomButton/CustomButton";
 export default function BehaviourCalendar(props) {
   const [weeks, setWeeks] = useState([]);
   const [selectedButton, setSelectedButton] = useState(1);
+  const [absent, setAbsent] = useState(false);
 
   useEffect(() => {
     generateWeeks(new Date(2022, 8, 5), new Date(2022, 11, 16));

@@ -40,6 +40,7 @@ export default function CalendarEntry(props) {
   const [data, setData] = useState(null);
   const [lessons, setLessons] = useState(null);
   const [expanded, setExpanded] = useState(null);
+  const [student, setStudent] = useState(null)
 
   const {setAlert} = useAlert()
 
@@ -108,6 +109,8 @@ export default function CalendarEntry(props) {
     setLessons(tempLessons);
   };
 
+  console.log(data)
+
   const sendSaveRequest = () => {
     const token = data.token
 
@@ -144,17 +147,17 @@ export default function CalendarEntry(props) {
   };
 
   useEffect(() => {
-    console.log(props.data);
     setData(props.data);
     setLessons(props.lessonReports);
+    setStudent(props.student)
   }, [props.data]);
 
   return (
     <div>
-      {data === null && lessons === null ? null : (
+      {data === null && lessons === null && student===null ? null : (
         <Dialog open={props.dialogOpen}>
           <DialogTitle>
-            Report for {props.student.firstName} {props.student.lastName},{" "}
+            Report for {student.firstName} {student.lastName},{" "}
             {new Date(props.day).toLocaleDateString()}
           </DialogTitle>
           <DialogContent>
