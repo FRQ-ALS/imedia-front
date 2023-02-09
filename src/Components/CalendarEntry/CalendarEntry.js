@@ -13,7 +13,6 @@ import CustomTextArea from "../CustomTextArea/CustomTextArea";
 import Select from "react-select";
 import useAlert from "../../Hooks/AlertHook";
 
-
 const options = [
   { label: "Yes", value: true },
   { label: "No", value: false },
@@ -21,18 +20,21 @@ const options = [
 
 const lessonTargets = [
   "Was the student on time?",
-  "Was the student....?",
-  "Was the student....?",
-  "Was the student....?",
-  "Was the student....?",
+  "Did the student listen and follow instructions?",
+  "Did the student show appropriate language and behaviour?",
+  "Did the student show and earn respect?",
+  "Did the student complete the tasks set?",
 ];
 
 const targetDictionary = new Map();
 targetDictionary.set(0, "onTime");
-targetDictionary.set(1, "propertyOne");
-targetDictionary.set(2, "propertyTwo");
-targetDictionary.set(3, "propertyThree");
-targetDictionary.set(4, "propertyFour");
+targetDictionary.set(1, "listened");
+targetDictionary.set(2, "language");
+targetDictionary.set(3, "respect");
+targetDictionary.set(4, "completeTask");
+targetDictionary.set(5, "present");
+targetDictionary.set(6, "sentOut");
+targetDictionary.set(7, "authorized");
 
 const jwt = document.cookie.split("=")[1];
 
@@ -40,9 +42,9 @@ export default function CalendarEntry(props) {
   const [data, setData] = useState(null);
   const [lessons, setLessons] = useState(null);
   const [expanded, setExpanded] = useState(null);
-  const [student, setStudent] = useState(null)
+  const [student, setStudent] = useState(null);
 
-  const {setAlert} = useAlert()
+  const { setAlert } = useAlert();
 
   const handleDefaultSelectValue = (lessonIndex, targetIndex) => {
     var currentTarget = targetDictionary.get(targetIndex);
@@ -51,35 +53,143 @@ export default function CalendarEntry(props) {
         return lessons[lessonIndex].onTime === true
           ? { label: "Yes", value: true }
           : { label: "No", value: false };
-          break;
+        break;
 
-      case "propertyOne":
-        return lessons[lessonIndex].propertyOne === true
+      case "listened":
+        return lessons[lessonIndex].listened === true
           ? { label: "Yes", value: true }
           : { label: "No", value: false };
 
-      case "propertyTwo":
-        return lessons[lessonIndex].propertyTwo === true
+      case "language":
+        return lessons[lessonIndex].language === true
           ? { label: "Yes", value: true }
           : { label: "No", value: false };
-          break;
+        break;
 
-
-      case "propertyThree":
-        return lessons[lessonIndex].propertyThree === true
+      case "respect":
+        return lessons[lessonIndex].respect === true
           ? { label: "Yes", value: true }
           : { label: "No", value: false };
-          break;
+        break;
 
-
-      case "propertyFour":
-        return lessons[lessonIndex].propertyFour === true
+      case "completeTask":
+        return lessons[lessonIndex].completeTask === true
           ? { label: "Yes", value: true }
           : { label: "No", value: false };
-          break;
-          
+        break;
+
+      case "present":
+        return lessons[lessonIndex].present === true
+          ? { label: "Yes", value: true }
+          : { label: "No", value: false };
+        break;
+
+      case "sentOut":
+        return lessons[lessonIndex].sentOut === true
+          ? { label: "Yes", value: true }
+          : { label: "No", value: false };
+        break;
+
+      case "authorized":
+        return lessons[lessonIndex].sentOut === true
+          ? { label: "Yes", value: true }
+          : { label: "No", value: false };
     }
   };
+
+  function renderLessonTargets(lessonIndex) {
+    return (
+      <>
+        <div
+          style={{
+            display: "flex",
+            flexDirecton: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <div>
+            <label>Was the student present?</label>
+          </div>
+          <Select
+            value={handleDefaultSelectValue(lessonIndex, 5)}
+            onChange={(event) => handleSelectChange(event, lessonIndex, 5)}
+            options={options}
+          />
+        </div>
+
+        {lessons[lessonIndex].present ? (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirecton: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <label>Was the student sent out?</label>
+              </div>
+              <Select
+                value={handleDefaultSelectValue(lessonIndex, 6)}
+                onChange={(event) => handleSelectChange(event, lessonIndex, 6)}
+                options={options}
+              />
+            </div>
+          </>
+        ) : (
+          <>
+            <div
+              style={{
+                display: "flex",
+                flexDirecton: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <div>
+                <label>Was the absence authorized?</label>
+              </div>
+              <Select
+                value={handleDefaultSelectValue(lessonIndex, 7)}
+                onChange={(event) => handleSelectChange(event, lessonIndex, 7)}
+                options={options}
+              />
+            </div>
+          </>
+        )}
+
+        {lessons[lessonIndex].sentOut ||
+        !lessons[lessonIndex].present ? null : (
+          <>
+            {lessonTargets.map((target, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  flexDirecton: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <div>
+                  <label>{target}</label>
+                </div>
+                <Select
+                  value={handleDefaultSelectValue(lessonIndex, index)}
+                  onChange={(event) =>
+                    handleSelectChange(event, lessonIndex, index)
+                  }
+                  options={options}
+                />
+              </div>
+            ))}
+          </>
+        )}
+      </>
+    );
+  }
 
   const handleSelectChange = (e, lessonIndex, targetIndex) => {
     const tempLessons = [...lessons];
@@ -90,29 +200,40 @@ export default function CalendarEntry(props) {
         tempLessons[lessonIndex].onTime = e.value;
         break;
 
-      case "propertyOne":
-        tempLessons[lessonIndex].propertyOne = e.value;
+      case "listened":
+        tempLessons[lessonIndex].listened = e.value;
         break;
 
-      case "propertyTwo":
-        tempLessons[lessonIndex].propertyTwo = e.value;
+      case "language":
+        tempLessons[lessonIndex].language = e.value;
         break;
 
-      case "propertyThree":
-        tempLessons[lessonIndex].propertyThree = e.value;
+      case "respect":
+        tempLessons[lessonIndex].respect = e.value;
         break;
 
-      case "propertyFour":
-        tempLessons[lessonIndex].propertyFour = e.value;
+      case "completeTask":
+        tempLessons[lessonIndex].completeTask = e.value;
+        break;
+
+      case "present":
+        tempLessons[lessonIndex].present = e.value;
+        break;
+
+      case "sentOut":
+        tempLessons[lessonIndex].sentOut = e.value;
+        break;
+
+      case "authorized":
+        tempLessons[lessonIndex].authorized = e.value;
         break;
     }
+
     setLessons(tempLessons);
   };
 
-  console.log(data)
-
   const sendSaveRequest = () => {
-    const token = data.token
+    const token = data.token;
 
     fetch(`/api/v1/behaviour/updatereports/entryToken=${token}`, {
       credentials: "include",
@@ -122,14 +243,13 @@ export default function CalendarEntry(props) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(lessons),
-    })
-      .then((response) => {
-        if(!response.ok){
-          setAlert("Save unsuccessful", "error")
-          return
-        }
-        setAlert("Save successful!", "success")
-      })
+    }).then((response) => {
+      if (!response.ok) {
+        setAlert("Save unsuccessful", "error");
+        return;
+      }
+      setAlert("Save successful!", "success");
+    });
   };
 
   const handleCommentInput = (event, lessonIndex) => {
@@ -149,12 +269,12 @@ export default function CalendarEntry(props) {
   useEffect(() => {
     setData(props.data);
     setLessons(props.lessonReports);
-    setStudent(props.student)
+    setStudent(props.student);
   }, [props.data]);
 
   return (
     <div>
-      {data === null && lessons === null && student===null ? null : (
+      {data === null && lessons === null && student === null ? null : (
         <Dialog open={props.dialogOpen}>
           <DialogTitle>
             Report for {student.firstName} {student.lastName},{" "}
@@ -176,15 +296,15 @@ export default function CalendarEntry(props) {
                   >
                     <label>
                       Lesson {lessonIndex + 1}{" "}
-                        <label
-                          style={{
-                            opacity: "0.5",
-                            marginLeft: "20px",
-                            fontStyle: "italic",
-                          }}
-                        >
-                          {report.score}/5
-                        </label>
+                      <label
+                        style={{
+                          opacity: "0.5",
+                          marginLeft: "20px",
+                          fontStyle: "italic",
+                        }}
+                      >
+                        {report.score}/5
+                      </label>
                     </label>
                   </AccordionSummary>
                   <AccordionDetails>
@@ -196,28 +316,7 @@ export default function CalendarEntry(props) {
                         gap: "20px",
                       }}
                     >
-                      {lessonTargets.map((target, index) => (
-                        <div
-                          key={index}
-                          style={{
-                            display: "flex",
-                            flexDirecton: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                          }}
-                        >
-                          <div>
-                            <label>{target}</label>
-                          </div>
-                          <Select
-                            value={handleDefaultSelectValue(lessonIndex, index)}
-                            onChange={(event) =>
-                              handleSelectChange(event, lessonIndex, index)
-                            }
-                            options={options}
-                          />
-                        </div>
-                      ))}
+                      {renderLessonTargets(lessonIndex)}  
                       <CustomTextArea
                         id="lessonReportTextArea"
                         placeholder="General Comments"
@@ -230,7 +329,7 @@ export default function CalendarEntry(props) {
                           outline: "1px solid black",
                           fontSize: "1em",
                           height: "70px",
-                          width: "400px",
+                          // width: "500px",
                           textAlign: "left",
                         }}
                       ></CustomTextArea>

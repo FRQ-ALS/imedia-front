@@ -1,4 +1,3 @@
-import "./App.css";
 import { ThemeProvider } from "@mui/system";
 import theme from "./Components/Theme/Theme";
 import { Button } from "@mui/material";
@@ -21,30 +20,23 @@ import BehaviourView from "./Components/BehaviourView/BehaviourView";
 
 
 
-
-function App() {
-
+export default function AppInterface(){
   const {auth} = useAuth();
 
 
-  return (
-    <div className="App">
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {auth==true ?  <AppBar setLogin={auth} /> : null}
+return(<div>
+    <AppBar setLogin={auth} />
           <CustomAlert id="alert"/>
           <Routes>
-            {auth===false ? <Route path="/*" element={<LoginWindow/>}/> : <>
+            {/* {auth===false ? <Route path="/*" element={<LoginWindow/>}/> : <> */}
             <Route path="/dashboard" element={<Dashboard/>}/>
             <Route exact path="/assessment-builder/:token" element={<AssessmentPage/>}/>
             <Route path="*" element={<PageRedirect/>}/>
             <Route path="/behaviour" element={<BehaviourView/>}/>
-            </>
-              }
+            {/* </>
+              } */}
           </Routes>
-        </ThemeProvider>
-    </div>
-  );
-}
+</div>)
 
-export default App;
+
+}

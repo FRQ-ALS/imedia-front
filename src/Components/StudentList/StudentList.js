@@ -8,7 +8,7 @@ export default function StudentList(props) {
   const className = "studentContainer " + props.className
   const [studentData, setStudentData] = useState([]);
   const [selectedStudent, setSelectedStudent] = useState(null)
-  const [dashboardSelected, setDashboardSelected] = useState(false)
+  const [dashboardSelected, setDashboardSelected] = useState(true)
 
   const jwt = document.cookie.split("=")[1];
 
@@ -41,7 +41,6 @@ export default function StudentList(props) {
     })
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson);
         setStudentData(responseJson);
       });
   };

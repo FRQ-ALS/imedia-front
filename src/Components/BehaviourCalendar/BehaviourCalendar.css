@@ -4,7 +4,7 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  padding: 20px 50px;
+  padding: 20px 80px;
 }
 
 #termButtonsContainer {
@@ -23,6 +23,16 @@
   color: #d5212e;
   font-weight: bold;
   background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+#todayButton{
+  height: 40px;
+  width: 100px;
+  color: white;
+  background-color: #d5212e;
+  font-weight: bold;
   border: none;
   cursor: pointer;
 }
@@ -70,7 +80,8 @@ th {
 
 #calendarDayContainer {
   height: 70px;
-  width: 180px;
+  width: 100%;
+  min-width: 160px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -105,4 +116,55 @@ th {
     opacity: 1;
     top: 0px;
   }
+}
+
+.todaysDate{
+  outline: 2px solid #d5212e;
+}
+.authAbsent{
+  background-color: rgb(172, 172, 172) !important;
+  color: black !important;
+}
+
+.absentUnAuth{
+  background-color: pink !important;
+
+}
+
+.highScore{
+  background-color: green !important;
+  color: white !important;
+}
+
+.midScore{
+  background-color: orange !important;
+  color: white !important;
+}
+
+.lowScore{
+  background-color: red !important;
+  color: white !important;
+}
+
+
+#calendarDayMenu{
+  position:relative;
+  background-color: white;
+  width: 80px;
+  /* height: 150px; */
+  top: -50px;
+  left: 40px;
+  gap: 5px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+#dropDown{
+  position: absolute;
+  top: 0px;
+}
+
+[nonSelectable~="yes"]{
+  /* pointer-events: none; */
 }

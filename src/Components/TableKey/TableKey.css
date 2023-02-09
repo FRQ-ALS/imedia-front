@@ -1,0 +1,55 @@
+#tableKeysContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+  gap: 20px;
+  justify-content: center;
+}
+
+html{
+    scroll-behavior: smooths;
+}
+
+#individualContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  font-weight: bold;
+  color: grey;
+}
+
+#authorizedAbsence {
+  height: 15px;
+  width: 15px;
+  background-color: grey;
+  border-radius: 50%;
+}
+
+#Absent {
+  height: 15px;
+  width: 15px;
+  background-color: pink;
+  border-radius: 50%;
+}
+
+#lowScore{
+    height: 15px;
+    width: 15px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+#mediumScore{
+    height: 15px;
+    width: 15px;
+    background-color: orange;
+    border-radius: 50%;
+}
+
+#highScore{
+    height: 15px;
+    width: 15px;
+    background-color: green;
+    border-radius: 50%;
+}

@@ -7,6 +7,9 @@
   top: 0;
   padding: 10px 15px;
   user-select: none;
+  /* width: 200px; */
+  /* animation: appearFromLeft 0.1s linear; */
+  
 }
 #studentItem {
   color: white;
@@ -72,4 +75,15 @@ td {
   user-select: none;
   cursor: pointer;
   margin-bottom: 10px;
+}
+
+@keyframes appearFromLeft {
+  0%{
+    transform: translateX(-200px);
+  }
+
+  100%{
+    transform: translateX(0px);
+  }
+  
 }

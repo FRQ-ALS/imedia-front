@@ -53,8 +53,8 @@ export default function LoginWindow(props) {
           let date = new Date();
           date.setTime(date.getTime() + 7 * 24 * 60 * 60 * 1000);
           let expires = "expires=" + date.toUTCString();
-          document.cookie = "jwt=" + responseJson.jwt + "; " + expires + "; path=/; secure";
-
+          document.cookie =
+            "jwt=" + responseJson.jwt + "; " + expires + "; path=/; secure";
         });
       }
     });
@@ -62,7 +62,16 @@ export default function LoginWindow(props) {
 
   return (
     <div id="loginScreenContainer">
+      <div>
+        <img
+          id="loginBackgroundImage"
+          src="https://static.wixstatic.com/media/b48888122ae14993a250095f290cecd1.jpg/v1/fill/w_934,h_928,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b48888122ae14993a250095f290cecd1.jpg"
+        ></img>
+      </div>
+      <div style={{ width:'100%',display:'flex', flexDirection:'row', justifyContent:'center', alignItems:'center'}}>
       <div id="loginContainer" className={className}>
+      {/* <label id="loginHeadingLabel">iMedia School Portal</label> */}
+      <img id="imediaBadge" src="https://static.wixstatic.com/media/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png/v1/fill/w_385,h_192,al_c,lg_1,q_85,enc_auto/9f1b94_dda5cfa09f504547b66f237ad22c5106~mv2.png"></img>
         <CustomTextField
           id="emailField"
           onChange={handleLoginChange}
@@ -86,14 +95,10 @@ export default function LoginWindow(props) {
           color="secondary"
           // className="signin-button"
         >
-          SIGN IN
+          Login
         </CustomButton>
-        <a className="link" href="/">
-          Forgot password?
-        </a>
-        <a className="link" href="/signup">
-          Don't have an account?
-        </a>
+        <img id="offstedBadgeImage" src="https://static.wixstatic.com/media/b94e2f_5d7b5c27bd4e4f2e82e3432d7322b621~mv2.png/v1/crop/x_152,y_0,w_738,h_421/fill/w_452,h_258,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/b94e2f_5d7b5c27bd4e4f2e82e3432d7322b621~mv2.png"></img>
+      </div>
       </div>
     </div>
   );

@@ -6,10 +6,12 @@
   border-radius: 10px;
   font-family: 'Helvetica' !important;
   font-size: 1em; 
-  animation: dropDown 250ms linear;
+  /* animation: dropDown 250ms linear; */
   z-index: 10;
-  position: fixed;
-  top: 60px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  /* top: 60px; */
 }
 
 .error {
